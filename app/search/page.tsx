@@ -45,8 +45,8 @@ export default function Search() {
             }}
           />
 
-          <div className='flex justify-between'>
-            <div className='space-y-2'>
+          <div className='flex flex-col'>
+            <div className='space-y-2 w-full'>
               <input type="file" name="" id="file" hidden onChange={(e) => addFile(e)} />
 
               {files.length > 0 && (
@@ -64,15 +64,18 @@ export default function Search() {
                 </div>
               )}
               
+            </div>
+
+            <div className='flex justify-between w-full mt-2'>
               <label htmlFor='file' className='flex items-center hover:bg-neutral-600 py-2 px-3 rounded-full w-fit'>
                 <FiPlusCircle className='text-gray-100 text-2xl cursor-pointer' />
                 <p className='ml-2 text-gray-300 font-semibold'>Attach</p>
               </label>
-            </div>
 
-            <button onClick={() => router.push(`/search?q=${searchInput}`)}>
-              <BsArrowRightCircleFill className='text-gray-400 text-2xl' />
-            </button>
+              <button onClick={() => router.push(`/search?q=${searchInput}`)}>
+                <BsArrowRightCircleFill className='text-gray-400 text-2xl' />
+              </button>
+            </div>
           </div>
           
         </div>
