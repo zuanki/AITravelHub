@@ -20,11 +20,6 @@ type SearchResult = {
   link_image: string;
 };
 
-const getCurrentDatetime = (): string => {
-  const date = new Date();
-  return moment(date).format('YYYY-MM-DD_HH:mm:ss');
-};
-
 const data: SearchResult[] = [
   {
     score: 0.5,
@@ -47,6 +42,11 @@ const data: SearchResult[] = [
       'https://www.jal.co.jp/vn/vn/guide-to-japan/destinations/articles/hokkaido/best-parks-and-nature-attractions/_jcr_content/root/responsivegrid/sectioncontainer/image_1041888335.coreimg.jpeg/1636979413394.jpeg',
   },
 ];
+
+const getCurrentDatetime = (): string => {
+  const date = new Date();
+  return moment(date).format('YYYY-MM-DD_HH:mm:ss');
+};
 
 export default function Search() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
