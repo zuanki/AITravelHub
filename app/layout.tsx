@@ -1,16 +1,16 @@
 /* Components */
-import { Providers } from '@/lib/providers'
+import { Providers } from '@/lib/providers';
 // import { Nav } from './components/Nav'
 
 /* Instruments */
-import styles from './styles/layout.module.css'
-import './styles/globals.css'
+import styles from './styles/layout.module.css';
+import './styles/globals.css';
 
 export default function RootLayout(props: React.PropsWithChildren) {
   return (
     <Providers>
-      <html lang="en">
-        <body>
+      <html lang='en'>
+        <body className='bg-[#1f1f1d]'>
           <section className={styles.container}>
             {/* <Nav /> */}
 
@@ -62,5 +62,5 @@ export default function RootLayout(props: React.PropsWithChildren) {
         </body>
       </html>
     </Providers>
-  )
+  );
 }
