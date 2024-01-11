@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { IoIosCloseCircle } from 'react-icons/io';
 import { BsArrowRightCircleFill } from 'react-icons/bs';
@@ -49,6 +49,8 @@ const getCurrentDatetime = (): string => {
 };
 
 export default function Search() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   const [searchInput, setSearchInput] = useState<string>('');
@@ -71,7 +73,6 @@ export default function Search() {
       setBlobUrl(URL.createObjectURL(file));
       setFileImage(file);
       setIsSubmit(false);
-      setUrlImage('');
     }
   };
 
@@ -80,7 +81,13 @@ export default function Search() {
       URL.revokeObjectURL(blobUrl);
       setBlobUrl('');
     }
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+
     setFileImage(null);
+    setUrlImage('');
   };
 
   const clearInputs = () => {
@@ -98,6 +105,10 @@ export default function Search() {
   // Handle keydown
   const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement>) => {
     if (event.type === 'click' || (event as React.KeyboardEvent).key === 'Enter') {
+      if (searchInput === '' && !fileImage) return;
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
       let promiseUpload: Promise<string> = Promise.resolve('');
       if (fileImage) {
         const name = fileImage.name;
@@ -191,7 +202,7 @@ export default function Search() {
 
           <div className='flex flex-col'>
             <div className='w-full space-y-2'>
-              <input type='file' name='' id='file' hidden onChange={(e) => addFileImage(e)} />
+              <input ref={fileInputRef} type='file' name='' id='file' hidden onChange={(e) => addFileImage(e)} />
 
               {fileImage && (
                 <div className='flex space-x-2'>
