@@ -10,7 +10,7 @@ export default function RootLayout(props: React.PropsWithChildren) {
   return (
     <Providers>
       <html lang='en'>
-        <body className='bg-[#1f1f1d]'>
+        <body className='bg-gray-50'>
           <section className={styles.container}>
             {/* <Nav /> */}
 

@@ -10,6 +10,7 @@ import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase/config';
 import moment from 'moment';
+import { set } from 'firebase/database';
 
 type SearchResult = {
   score: number;
@@ -100,6 +101,9 @@ export default function Search() {
   const clearSearchResults = () => {
     setUrlImage('');
     setSearchResults([]);
+    setIsSubmit(false);
+    setPreviousInput('');
+    setSearchInput('');
   };
 
   // Handle keydown
@@ -184,8 +188,8 @@ export default function Search() {
   };
 
   return (
-    <div className='mt-12 flex w-full items-center justify-center bg-[#1f1f1d]'>
-      <div className='mth-fit w-[800px] rounded-xl bg-[#292927]'>
+    <div className='mt-12 flex w-full items-center justify-center '>
+      <div className='mth-fit w-[800px] rounded-xl bg-[#1f1f1d]'>
         <div className='space-y-4 px-8 py-2'>
           <input
             type='text'
@@ -228,34 +232,41 @@ export default function Search() {
                 <p className='ml-2 font-semibold text-gray-300'>Attach</p>
               </label>
 
-              <button type='button' onClick={handleKeyDown}>
-                <BsArrowRightCircleFill className='text-2xl text-gray-400' />
+              <button type='button' onClick={handleKeyDown} >
+                <BsArrowRightCircleFill className='text-2xl text-gray-400 hover:text-gray-100 cursor-pointer' />
               </button>
             </div>
           </div>
         </div>
         {isSubmit && (
-          <div>
-            <div className='mx-10 mt-3 text-xl text-white'>{previousInput}</div>
+          <div className='text-white mx-10'>
+            <div className='flex justify-between mx-8 items-center'>
+              <div className=' text-xl text-white'>{previousInput}</div>
+
+              <button onClick={() => clearSearchResults()}>
+                <IoIosCloseCircle className='text-gray-400 text-2xl' />
+              </button>
+            </div>
             {urlImage != '' ? (
               <div className='flex flex-col items-center justify-center'>
-                <img src={urlImage} alt='image' className='max-h-96 w-fit rounded-md p-10' />
+                <img src={urlImage} alt='image' className='max-h-96 w-1/2 rounded-lg p-10' />
               </div>
             ) : null}
-            {searchResults.length > 0 && (
-              <div className='mt-2'>
-                <ul>
-                  {searchResults.map((result) => {
+            {
+              searchResults.length > 0 && (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 my-10">
+                  {searchResults.map((result, idx) => {
                     return (
-                      <li key={result.name}>
-                        <h3>{result.name}</h3>
-                        <img src={result.link_image} alt={result.name} className='rounded-md' />
-                      </li>
+                      <div key={result.subtitle} className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                        <a href={`/destination/${idx}`}>
+                          <img className="rounded-lg" src={result.link_image} alt={result.name} />
+                        </a>
+                      </div>
                     );
                   })}
-                </ul>
-              </div>
-            )}
+                </div>
+              )
+            }
           </div>
         )}
       </div>
