@@ -266,10 +266,10 @@ export default function Search() {
       <div className='flex justify-center items-center text-4xl font-bold m-12'>
         Where knowledge begins
       </div>
-      <div className='flex justify-center items-center'>
-        <div className='w-[800px] p-4 justify-center items-center rounded-md border-2 border-[#9DC08B]'>
+      <div className='flex  justify-center items-center'>
+        <div className='w-[800px]  p-4 justify-center items-center rounded-md border-[1.5px] border-[#9DC08B]'>
           <textarea
-            className='p-2 bg-[#EDF1D6] w-full resize-none overflow-hidden focus:right-0 focus:outline-none'
+            className='p-2 w-full resize-none overflow-hidden focus:right-0 focus:outline-none'
             placeholder='Ask anything . . .'
             onInput={autoResize}
             value={searchInput}
@@ -328,15 +328,17 @@ export default function Search() {
             {
               data.map((result, idx) => {
                 return (
-                  <div>
-                    <div className='my-4 flex items-center' key={idx}>
+                  <div key={idx}>
+                    <div className='my-4 flex items-center'>
                       <div>
                         <img src={result.link_image} alt={result.name} className='rounded-lg  w-[100px] h-[100px]' />
                       </div>
                       <div className='ml-4 flex flex-col justify-center w-full' >
                         <div className='flex justify-between items-center w-full mb-2'>
                           <div className='font-bold text-lg'>
-                            {result.name}
+                            <a href={`/destination/${result.id}`}>
+                              {result.name}
+                            </a>
                           </div>
                           <div className='text-xs font-bold'>
                             <div className='flex items-center'>
@@ -361,7 +363,7 @@ export default function Search() {
             }
           </div>
         </div>
-      </div>
+      </div >
     </div >
   );
 }

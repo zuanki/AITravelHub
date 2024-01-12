@@ -10,7 +10,7 @@ export default function RootLayout(props: React.PropsWithChildren) {
   return (
     <Providers>
       <html lang='en'>
-        <body className='bg-[#EDF1D6] text-[#40513B] font-poppins'>
+        <body className='text-[#40513B] font-poppins'>
           <section >
             <main >{props.children}</main>
           </section>
