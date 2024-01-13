@@ -40,7 +40,7 @@ app.post('/api/search', (req, res) => {
             .search({
               collection_name: 'JapanGuideImageEmbedding',
               data: vector,
-              output_fields: ['name', 'subtitle', 'description', 'link_image'],
+              output_fields: ['destination', 'title', 'description', 'image'],
               limit: 5,
             })
             .then((searchResponse) => {
