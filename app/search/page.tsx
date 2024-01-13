@@ -18,92 +18,44 @@ import { AiOutlineDislike } from "react-icons/ai";
 type SearchResult = {
   score: number;
   id: string;
-  name: string;
-  subtitle: string;
+  destination: string;
+  title: string;
   description: string;
-  link_image: string;
+  image: string;
 };
 
 const data: SearchResult[] = [
   {
-    score: 0.5,
-    id: '1',
-    name: 'Tokyo',
-    subtitle: 'Tokyo is the capital of Japan.',
-    description:
-      'Tokyo is the capital of Japan. It is the center of the Greater Tokyo Area, and the most populous metropolitan area in the world. It is the seat of the Japanese government and the Imperial Palace, and the home of the Japanese Imperial Family.',
-    link_image:
-      'https://media.cntraveler.com/photos/60341fbad7bd3b27823c9db2/4:3/w_4624,h_3468,c_limit/Tokyo-2021-GettyImages-1208124099.jpg',
+    "score": 0.9999999999999999,
+    "id": "G5651XC8",
+    "title": "",
+    "destination": "Hokkaido",
+    "image": "https://en.japantravel.com/photo/1655-215379/1440x960!/hokkaido-lake-toya-215379.jpg",
+    "description": "Hokkaido as Japan’s second largest island to the far north, has much wilderness to be explored.\nRenowned among tourists and locals alike for its abundance of powder snow and white landscapes, Hokkaido is always a popular choice for winter sports and scenery in places like Niseko and wetland Kushiro Shitsugen. Its attraction extends beyond nature to ramen and seafood such as crabs and sea urchins, which are of the highest quality in the frigid waters here.\nApart from its famed cuisine, parks and beautiful nature, Hokkaido is also steeped in history as the home of the indigenous Ainu people. Increasingly popular in seasons other than winter, more visitors have been flocking here for the delightful moss phlox and tulip fields in spring and a land that teems with life during summer."
   },
   {
-    score: 0.9,
-    id: '2',
-    name: 'Hokkaido',
-    subtitle: 'Hokkaido is the second largest island of Japan.',
-    description:
-      'Hokkaido is the second largest island of Japan, and the largest and northernmost prefecture. The Tsugaru Strait separates Hokkaido from Honshu. The two islands are connected by the undersea railway Seikan Tunnel.',
-    link_image:
-      'https://www.jal.co.jp/vn/vn/guide-to-japan/destinations/articles/hokkaido/best-parks-and-nature-attractions/_jcr_content/root/responsivegrid/sectioncontainer/image_1041888335.coreimg.jpeg/1636979413394.jpeg',
+    "score": 0.8333333333333334,
+    "id": "R3U0Y210",
+    "title": "Hokkaido's second biggest city",
+    "destination": "Asahikawa",
+    "image": "https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg",
+    "description": "Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido"
   },
   {
-    score: 0.5,
-    id: '1',
-    name: 'Tokyo',
-    subtitle: 'Tokyo is the capital of Japan.',
-    description:
-      'Tokyo is the capital of Japan. It is the center of the Greater Tokyo Area, and the most populous metropolitan area in the world. It is the seat of the Japanese government and the Imperial Palace, and the home of the Japanese Imperial Family.',
-    link_image:
-      'https://media.cntraveler.com/photos/60341fbad7bd3b27823c9db2/4:3/w_4624,h_3468,c_limit/Tokyo-2021-GettyImages-1208124099.jpg',
+    "score": 0.8333333333333334,
+    "id": "ZMZ2UMGU",
+    "title": "Many cute animals for you to make friends up close",
+    "destination": "Hokkaido: Asahiyama Zoo in Summer",
+    "image": "https://a1.cdn.japantravel.com/photo/10331-63336/360x240!/hokkaido-สวนสัตว์-asahiyama-ในฤดูร้อน-63336.jpg",
+    "description": "Asahiyama Zoo is an interesting place to visit near Asahikawa. It is a place you can go spend an entire day without getting bored. It's more popular in winter as there is a special penguin parade show. However, in summer, this place is not any less fun to visit. Aside from the many animals (both local Hokkaido species and animals from around the world), the key highlight of this place is the many interesting and up close ways you can interact with the animals that are unlike any other zoos."
   },
   {
-    score: 0.9,
-    id: '2',
-    name: 'Hokkaido',
-    subtitle: 'Hokkaido is the second largest island of Japan.',
-    description:
-      'Hokkaido is the second largest island of Japan, and the largest and northernmost prefecture. The Tsugaru Strait separates Hokkaido from Honshu. The two islands are connected by the undersea railway Seikan Tunnel.',
-    link_image:
-      'https://www.jal.co.jp/vn/vn/guide-to-japan/destinations/articles/hokkaido/best-parks-and-nature-attractions/_jcr_content/root/responsivegrid/sectioncontainer/image_1041888335.coreimg.jpeg/1636979413394.jpeg',
-  },
-  {
-    score: 0.5,
-    id: '1',
-    name: 'Tokyo',
-    subtitle: 'Tokyo is the capital of Japan.',
-    description:
-      'Tokyo is the capital of Japan. It is the center of the Greater Tokyo Area, and the most populous metropolitan area in the world. It is the seat of the Japanese government and the Imperial Palace, and the home of the Japanese Imperial Family.',
-    link_image:
-      'https://media.cntraveler.com/photos/60341fbad7bd3b27823c9db2/4:3/w_4624,h_3468,c_limit/Tokyo-2021-GettyImages-1208124099.jpg',
-  },
-  {
-    score: 0.9,
-    id: '2',
-    name: 'Hokkaido',
-    subtitle: 'Hokkaido is the second largest island of Japan.',
-    description:
-      'Hokkaido is the second largest island of Japan, and the largest and northernmost prefecture. The Tsugaru Strait separates Hokkaido from Honshu. The two islands are connected by the undersea railway Seikan Tunnel.',
-    link_image:
-      'https://www.jal.co.jp/vn/vn/guide-to-japan/destinations/articles/hokkaido/best-parks-and-nature-attractions/_jcr_content/root/responsivegrid/sectioncontainer/image_1041888335.coreimg.jpeg/1636979413394.jpeg',
-  },
-  {
-    score: 0.5,
-    id: '1',
-    name: 'Tokyo',
-    subtitle: 'Tokyo is the capital of Japan.',
-    description:
-      'Tokyo is the capital of Japan. It is the center of the Greater Tokyo Area, and the most populous metropolitan area in the world. It is the seat of the Japanese government and the Imperial Palace, and the home of the Japanese Imperial Family.',
-    link_image:
-      'https://media.cntraveler.com/photos/60341fbad7bd3b27823c9db2/4:3/w_4624,h_3468,c_limit/Tokyo-2021-GettyImages-1208124099.jpg',
-  },
-  {
-    score: 0.9,
-    id: '2',
-    name: 'Hokkaido',
-    subtitle: 'Hokkaido is the second largest island of Japan.',
-    description:
-      'Tokyo is the capital of Japan. It is the center of the Greater Tokyo Area, and the most populous metropolitan area in the world. It is the seat of the Japanese government and the Imperial Palace, and the home of the Japanese Imperial Family. Hokkaido is the second largest island of Japan, and the largest and northernmost prefecture. The Tsugaru Strait separates Hokkaido from Honshu. The two islands are connected by the undersea railway Seikan Tunnel.',
-    link_image:
-      'https://www.jal.co.jp/vn/vn/guide-to-japan/destinations/articles/hokkaido/best-parks-and-nature-attractions/_jcr_content/root/responsivegrid/sectioncontainer/image_1041888335.coreimg.jpeg/1636979413394.jpeg',
+    "score": 0.8333333333333334,
+    "id": "JA54JMFA",
+    "title": "Many cute animals for you to make friends up close",
+    "destination": "Hokkaido: Asahiyama Zoo in Summer",
+    "image": "https://a1.cdn.japantravel.com/photo/10331-63336/1000/hokkaido-สวนสัตว์-asahiyama-ในฤดูร้อน-63336.jpg",
+    "description": "Asahiyama Zoo is an interesting place to visit near Asahikawa. It is a place you can go spend an entire day without getting bored. It's more popular in winter as there is a special penguin parade show. However, in summer, this place is not any less fun to visit. Aside from the many animals (both local Hokkaido species and animals from around the world), the key highlight of this place is the many interesting and up close ways you can interact with the animals that are unlike any other zoos."
   },
 ];
 
@@ -171,7 +123,7 @@ export default function Search() {
 
   // Handle keydown
   const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.type === 'click' || (event as React.KeyboardEvent).key === 'Enter') {
+    if (event.type === 'click') {
       if (searchInput === '' && !fileImage) return;
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -326,40 +278,42 @@ export default function Search() {
           </div>
           <div>
             {
-              data.map((result, idx) => {
-                return (
-                  <div key={idx}>
-                    <div className='my-4 flex items-center'>
-                      <div>
-                        <img src={result.link_image} alt={result.name} className='rounded-lg  w-[100px] h-[100px]' />
-                      </div>
-                      <div className='ml-4 flex flex-col justify-center w-full' >
-                        <div className='flex justify-between items-center w-full mb-2'>
-                          <div className='font-bold text-lg'>
-                            <a href={`/destination/${result.id}`}>
-                              {result.name}
-                            </a>
-                          </div>
-                          <div className='text-xs font-bold'>
-                            <div className='flex items-center'>
-                              <AiOutlineLike className='text-xl text-[#9DC08B]' />
-                              <p className='ml-2'>1.2k</p>
+              searchResults && searchResults.length > 0 && (
+                searchResults.map((result, idx) => {
+                  return (
+                    <div key={idx}>
+                      <div className='my-4 flex items-center'>
+                        <div>
+                          <img src={result.image} alt={result.description} className='rounded-lg  w-[100px] h-[100px]' />
+                        </div>
+                        <div className='ml-4 flex flex-col justify-center w-full' >
+                          <div className='flex justify-between items-center w-full mb-2'>
+                            <div className='font-bold text-lg'>
+                              <a href={`/destination/${result.id}`}>
+                                {result.destination}
+                              </a>
+                            </div>
+                            <div className='text-xs font-bold'>
+                              <div className='flex items-center'>
+                                <AiOutlineLike className='text-xl text-[#9DC08B]' />
+                                <p className='ml-2'>1.2k</p>
 
-                              <AiOutlineDislike className='text-xl text-[#9DC08B] ml-4' />
-                              <p className='ml-2'>1.2k</p>
+                                <AiOutlineDislike className='text-xl text-[#9DC08B] ml-4' />
+                                <p className='ml-2'>1.2k</p>
+                              </div>
                             </div>
                           </div>
+                          <div className='text-sm'>
+                            {truncate(result.description, 250)}
+                          </div>
                         </div>
-                        <div className='text-sm'>
-                          {truncate(result.description, 250)}
-                        </div>
-                      </div>
 
+                      </div>
+                      <hr className='border-[#9DC08B]' />
                     </div>
-                    <hr className='border-[#9DC08B]' />
-                  </div>
-                );
-              })
+                  );
+                })
+              )
             }
           </div>
         </div>
