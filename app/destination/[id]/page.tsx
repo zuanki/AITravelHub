@@ -148,6 +148,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
     // Handle Button Click
     const handleButtonClick = async () => {
+        if (!userQuery) return;
         await getAnswer(userQuery);
         setUserQuery('');
     };
@@ -159,6 +160,37 @@ export default function Page({ params }: { params: { id: string } }) {
             : description;
     }
 
+    // Handle Rewriting
+    const handleRewriting = async (idx: number) => {
+        const question = chatHistory[idx].userQuery;
+        // Remove all from idx to the end
+        const n_chatHistory = chatHistory.slice(0, idx + 1);
+
+        // Modify the last message
+        const result = randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
+
+        // Split the result into an array of words
+        const words = result.split(' ');
+
+        // Display words one by one at intervals
+        for (let i = 0; i < words.length; i++) {
+            setTimeout(() => {
+                setBotResponses(prevAnswers => [
+                    ...prevAnswers,
+                    words[i]
+                ]);
+            }, Math.floor(Math.random() * 50) + 50 * i);
+        }
+
+        // Store user and bot messages in chat history
+        n_chatHistory[n_chatHistory.length - 1].botResponse = result;
+
+        // Reset bot answers
+        setBotResponses([]);
+
+        // Update chat history
+        setChatHistory(n_chatHistory);
+    }
 
 
     return (
@@ -225,7 +257,10 @@ export default function Page({ params }: { params: { id: string } }) {
                                                     Share
                                                 </div>
                                             </button>
-                                            <button className="flex justify-begin items-center hover:bg-[#9DC08B] rounded-full cursor-pointer pr-4" >
+                                            <button
+                                                className="flex justify-begin items-center hover:bg-[#9DC08B] rounded-full cursor-pointer pr-4"
+                                                onClick={() => handleRewriting(index)}
+                                            >
                                                 <HiArrowPathRoundedSquare className="inline-block text-3xl p-2 " />
                                                 <div>
                                                     Rewrite
