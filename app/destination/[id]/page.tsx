@@ -10,14 +10,13 @@ import { LuClipboardCopy } from "react-icons/lu"; // Copy
 import { FaRegEdit } from "react-icons/fa"; // Edit Question
 import { MdDelete } from "react-icons/md"; // Delete
 import supabase from "@/lib/supabase";
+import Markdown from "react-markdown";
 
 
 const randomAnswers: string[] = [
-    'The TinyLlama project aims to pretrain a 1.1B Llama model on 3 trillion tokens. With some proper optimization, we can achieve this within a span of "just" 90 days using 16 A100-40G GPUs 🚀🚀. The training has started on 2023-09-01.',
-    'We adopted exactly the same architecture and tokenizer as Llama 2. This means TinyLlama can be plugged and played in many open-source projects built upon Llama. Besides, TinyLlama is compact with only 1.1B parameters. This compactness allows it to cater to a multitude of applications demanding a restricted computation and memory footprint.',
-    'A large language model (LLM) is a large-scale language model notable for its ability to achieve general-purpose language understanding and generation. LLMs acquire these abilities by using massive amounts of data to learn billions of parameters during training and consuming large computational resources during their training and operation.[1] LLMs are artificial neural networks (mainly transformers[2]) and are (pre)trained using self-supervised learning and semi-supervised learning.',
-    'Using a modification of byte-pair encoding, in the first step, all unique characters (including blanks and punctuation marks) are treated as an initial set of n-grams (i.e. initial set of uni-grams). Successively the most frequent pair of adjacent characters is merged into a bi-gram and all instances of the pair are replaced by it. All occurrences of adjacent pairs of (previously merged) n-grams that most frequently occur together are then again merged into even lengthier n-gram repeatedly until a vocabulary of prescribed size is obtained (in case of GPT-3, the size is 50257).[6] Token vocabulary consists of integers, spanning from zero up to the size of the token vocabulary. New words can always be interpreted as combinations of the tokens and the initial-set uni-grams.[7]',
-    'Removal of toxic passages from the dataset, discarding low-quality data, and de-duplication are examples of dataset cleaning.[10] Resulting, cleaned (high-quality) datasets contain up to 17 trillion words in 2022, raising from 985 million words, used in 2018 for GPT-1,[11] and 3.3 billion words, used for BERT.[12] The future data is, however, expected to be increasingly "contaminated" by LLM-generated contents themselves.[13]'
+    `- **Sushi:** *Delight in the exquisite flavors of Japan's iconic dish, sushi, with its perfect harmony of fresh fish, vinegared rice, and seaweed, showcasing the artistry of Japanese culinary tradition.*\n- **Manga:** *Immerse yourself in the captivating world of manga, where vivid illustrations and compelling storytelling converge, offering a unique and imaginative form of Japanese pop culture.*\n- **Cherry Blossoms:** *Witness the breathtaking beauty of cherry blossoms in spring, as these ephemeral flowers blanket the landscape in hues of pink, creating a magical and fleeting spectacle.*\n- **Samurai:** *Explore the rich history of Japan's legendary samurai warriors, known for their martial skills, honor code, and distinctive armor, leaving an indelible mark on the country's cultural heritage.*\n- **Zen Gardens:** *Find tranquility in the meticulous design of Zen gardens, where carefully arranged rocks, raked gravel, and lush greenery create a serene atmosphere, inviting contemplation and mindfulness.*`,
+    `- **Tokyo:** *Experience the vibrant blend of modernity and tradition in Japan's bustling capital, featuring skyscrapers, historic temples, and the iconic Shibuya Crossing.*\n- **Kyoto:** *Immerse yourself in the cultural heart of Japan with Kyoto's traditional tea houses, ancient shrines, and stunning gardens, preserving the country's rich heritage.*\n- **Osaka:** *Indulge in culinary delights and entertainment in Osaka, known for its street food, vibrant nightlife, and the historic Osaka Castle.*\n- **Hakone:** *Escape to the serene landscapes of Hakone, offering hot springs, picturesque views of Mount Fuji, and traditional ryokan stays.*\n- **Hiroshima:** *Reflect on history at Hiroshima, home to the Peace Memorial Park and Museum, and explore the rejuvenated city symbolizing resilience and peace.*`,
+    `- **寿司:** *楽しい日本の象徴、寿司の絶妙な味わいを堪能してください。新鮮な魚、酢飯、海藻の完璧なハーモニーが、日本料理の芸術を象徴しています。*\n- **マンガ:** *魅力的なマンガの世界に没頭し、鮮やかなイラストと引き込まれるストーリーテリングが交わり、ユニークで想像力豊かな日本のポップカルチャーを提供します。*\n- **桜:** *春の美しい桜の花々を目撃しましょう。これらの儚い花がピンクの色で風景を覆い、魔法のようで一瞬のスペクタクルを作り出します。*\n- **侍:** *伝説的な侍の武士の歴史を探索し、その武道、誠実なコード、特徴的な鎧で知られています。これらの戦士は、国の文化遺産に不可欠な印を残しました。*\n- **禅庭園:** *禅の庭園の緻密なデザインで静けさを見つけてください。注意深く配置された岩、櫛で整えられた砂利、豊かな緑が、静寂な雰囲気を作り出し、瞑想とマインドフルネスを招きます。*`
 ]
 
 type ChatHistory = {
@@ -160,6 +159,7 @@ export default function Page({ params }: { params: { id: string } }) {
             : description;
     }
 
+
     // Handle Rewriting
     const handleRewriting = async (idx: number) => {
         const question = chatHistory[idx].userQuery;
@@ -247,19 +247,19 @@ export default function Page({ params }: { params: { id: string } }) {
                                         </div>
                                         {
                                             index === chatHistory.length - 1 ? (
-                                                <p>
-                                                    {
+                                                <div>
+                                                    <Markdown className='whitespace-pre-line'>
+                                                        {botResponses.join(' ')}
+                                                    </Markdown>
 
-                                                        botResponses.map((answer, index) => (
-                                                            <span key={index}>{answer} </span>
-                                                        ))
+                                                </div>
 
-                                                    }
-                                                </p>
                                             ) : (
-                                                <p>
+
+                                                <Markdown className='whitespace-pre-line'>
                                                     {message.botResponse}
-                                                </p>
+                                                </Markdown>
+
                                             )
                                         }
                                     </div>
@@ -312,6 +312,6 @@ export default function Page({ params }: { params: { id: string } }) {
                 </div>
             </div>
 
-        </div>
+        </div >
     )
 }
