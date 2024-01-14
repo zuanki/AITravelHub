@@ -8,6 +8,7 @@
     "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@nextui-org/react": "^2.2.9",
     "@reduxjs/toolkit": "1.9.5",
     "@supabase/supabase-js": "^2.39.2",
     "@zilliz/milvus2-sdk-node": "^2.3.5",
