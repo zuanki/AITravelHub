@@ -8,7 +8,7 @@ import { HiArrowPathRoundedSquare } from "react-icons/hi2"; // Rewrite
 import { AiFillDislike } from "react-icons/ai"; // Dislike
 import { LuClipboardCopy } from "react-icons/lu"; // Copy
 import { FaRegEdit } from "react-icons/fa"; // Edit Question
-import { BsThreeDots } from "react-icons/bs"; // Delete
+import { MdDelete } from "react-icons/md"; // Delete
 import supabase from "@/lib/supabase";
 
 
@@ -192,6 +192,20 @@ export default function Page({ params }: { params: { id: string } }) {
         setChatHistory(n_chatHistory);
     }
 
+    // Handle Delete
+    const handleDelete = (idx: number) => {
+        // Remove idx from chat history
+        const n_chatHistory = chatHistory.filter((_, index) => index !== idx);
+        setChatHistory(n_chatHistory);
+    }
+
+    // Handle Copy to Clipboard
+    const handleCopy = (idx: number) => {
+        // Copy the bot response to clipboard
+        navigator.clipboard.writeText(chatHistory[idx].botResponse);
+    }
+
+
 
     return (
         <div>
@@ -251,12 +265,6 @@ export default function Page({ params }: { params: { id: string } }) {
                                     </div>
                                     <div className="flex justify-between mt-4 mb-8">
                                         <div className="flex justify-begin items-center">
-                                            <button className="flex justify-begin items-center hover:bg-[#9DC08B] rounded-full cursor-pointer pr-4" >
-                                                <FaShare className="inline-block text-3xl p-2 " />
-                                                <div>
-                                                    Share
-                                                </div>
-                                            </button>
                                             <button
                                                 className="flex justify-begin items-center hover:bg-[#9DC08B] rounded-full cursor-pointer pr-4"
                                                 onClick={() => handleRewriting(index)}
@@ -267,18 +275,15 @@ export default function Page({ params }: { params: { id: string } }) {
                                                 </div>
                                             </button>
                                         </div>
-                                        <div>
-                                            <button>
+                                        <div className="flex justify-begin items-center" >
+                                            <button className="relative overflow-hidden transform hover:scale-110 transition-transform duration-300">
                                                 <AiFillDislike className="inline-block mr-2 text-3xl p-2 hover:bg-[#9DC08B] rounded-full cursor-pointer" />
                                             </button>
-                                            <button>
+                                            <button onClick={() => handleCopy(index)}>
                                                 <LuClipboardCopy className="inline-block mr-2 text-3xl p-2 hover:bg-[#9DC08B] rounded-full cursor-pointer" />
                                             </button>
-                                            <button>
-                                                <FaRegEdit className="inline-block mr-2 text-3xl p-2 hover:bg-[#9DC08B] rounded-lg cursor-pointer" />
-                                            </button>
-                                            <button>
-                                                <BsThreeDots className="inline-block mr-2 text-3xl p-2 hover:bg-[#9DC08B] rounded-full cursor-pointer" />
+                                            <button onClick={() => handleDelete(index)}>
+                                                <MdDelete className="inline-block mr-2 text-3xl p-2 hover:bg-[#9DC08B] rounded-full cursor-pointer" />
                                             </button>
                                         </div>
                                     </div>
