@@ -14,6 +14,8 @@ import { set } from 'firebase/database';
 import { TbGridDots } from "react-icons/tb";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
+import { AiFillMessage } from "react-icons/ai";
+import Chat from '../components/vqachat';
 
 type SearchResult = {
   score: number;
@@ -198,6 +200,7 @@ export default function Search() {
         setBlobUrl('');
       }
 
+      // Test
       setSearchResults(data);
     }
   };
@@ -212,6 +215,16 @@ export default function Search() {
   const truncate = (str: string, n: number) => {
     return str?.length > n ? str.substring(0, n - 1) + ' ...' : str;
   };
+
+  // VQA Modal
+  const [openVQAChat, setOpenVQAChat] = useState<boolean>(false);
+
+  // Handle VQA Modal
+  const handleVQAChat = () => {
+    setOpenVQAChat(!openVQAChat);
+  };
+
+
 
   return (
     <div>
@@ -281,7 +294,7 @@ export default function Search() {
               searchResults && searchResults.length > 0 && (
                 searchResults.map((result, idx) => {
                   return (
-                    <div key={idx}>
+                    <div key={idx} className='z-0'>
                       <div className='my-4 flex items-center'>
                         <div>
                           <img src={result.image} alt={result.description} className='rounded-lg  w-[100px] h-[100px]' />
@@ -318,6 +331,20 @@ export default function Search() {
           </div>
         </div>
       </div >
+      <button
+        className="fixed bottom-4 right-4 font-bold rounded-full"
+        onClick={handleVQAChat}
+      >
+        <AiFillMessage className="text-4xl text-[#9DC08B]" />
+      </button>
+      {
+        openVQAChat && (
+          <div className='fixed bottom-12 right-12 px-6 py-4 text-sm w-[400px] h-[500px] bg-white border-[1.5px] rounded-md border-[#9DC08B]  shadow-xl'>
+            <Chat />
+          </div>
+        )
+      }
     </div >
   );
 }
+
