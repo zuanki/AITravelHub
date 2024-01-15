@@ -58,6 +58,14 @@ const p_data: SearchResult[] = [
         "destination": "Asahikawa",
         "image": "https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg",
         "description": "Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido"
+    },
+    {
+        "score": 0.8333333333333334,
+        "id": "R3U0Y210",
+        "title": "Hokkaido's second biggest city",
+        "destination": "Asahikawa",
+        "image": "https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg",
+        "description": "Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido"
     }
 ];
 
@@ -99,7 +107,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     });
 
                     // Test
-                    setRecommendedDestinations(p_data);
+                    // setRecommendedDestinations(p_data);
                 }
             } catch (error) {
                 console.error(error);
@@ -138,64 +146,67 @@ export default function Page({ params }: { params: { id: string } }) {
     // Get Answer
     const getAnswer = async (question: string) => {
         try {
-            // supabase.from("Server").select("server_url").eq("server_name", "Colab_Chatbot").then((r) => {
-            //     if (r.data && r.data.length > 0) {
-            //         const response = axios.post(r.data[0].server_url + '/chat/completions', {
-            //             context: truncateDescription(post.description),
-            //             userQuery: question
-            //         }).then((res) => {
-            //             const result = res.data.result;
-            //             console.log(result);
-            //             // Split the result into an array of words
-            //             const words = result.split(' ');
+            supabase.from("Server").select("server_url").eq("server_name", "Colab_Chatbot").then((r) => {
+                if (r.data && r.data.length > 0) {
+                    const response = axios.post(r.data[0].server_url + '/chat/completions', {
+                        context: truncateDescription(post.description),
+                        userQuery: question
+                    }).then((res) => {
+                        const result = res.data.result;
+                        console.log(result);
+                        // Split the result into an array of words
+                        const words = result.split(' ');
 
-            //             // Display words one by one at intervals
-            //             for (let i = 0; i < words.length; i++) {
-            //                 setTimeout(() => {
-            //                     setBotResponses(prevAnswers => [
-            //                         ...prevAnswers,
-            //                         words[i]
-            //                     ]);
-            //                 }, Math.floor(Math.random() * 50) + 50 * i);
-            //             }
+                        // Display words one by one at intervals
+                        for (let i = 0; i < words.length; i++) {
+                            setTimeout(() => {
+                                setBotResponses(prevAnswers => [
+                                    ...prevAnswers,
+                                    words[i]
+                                ]);
+                            }, Math.floor(Math.random() * 50) + 50 * i);
+                        }
 
-            //             // Store user and bot messages in chat history
-            //             setChatHistory([
-            //                 ...chatHistory,
-            //                 { userQuery: userQuery, botResponse: result }
-            //             ]);
+                        // Store user and bot messages in chat history
+                        setChatHistory([
+                            ...chatHistory,
+                            { userQuery: userQuery, botResponse: result }
+                        ]);
 
-            //             // Reset bot answers
-            //             setBotResponses([]);
-            //         });
-            //     }
-            // });
+                        // Reset bot answers
+                        setBotResponses([]);
+                    });
+                }
+            });
 
             // Test
-            const result =
-                randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
+            // ====================================================================================================
+            // const result =
+            //     randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
 
-            // Split the result into an array of words
-            const words = result.split(' ');
+            // // Split the result into an array of words
+            // const words = result.split(' ');
 
-            // Display words one by one at intervals
-            for (let i = 0; i < words.length; i++) {
-                setTimeout(() => {
-                    setBotResponses(prevAnswers => [
-                        ...prevAnswers,
-                        words[i]
-                    ]);
-                }, Math.floor(Math.random() * 50) + 50 * i);
-            }
+            // // Display words one by one at intervals
+            // for (let i = 0; i < words.length; i++) {
+            //     setTimeout(() => {
+            //         setBotResponses(prevAnswers => [
+            //             ...prevAnswers,
+            //             words[i]
+            //         ]);
+            //     }, Math.floor(Math.random() * 50) + 50 * i);
+            // }
 
-            // Store user and bot messages in chat history
-            setChatHistory([
-                ...chatHistory,
-                { userQuery: userQuery, botResponse: result }
-            ]);
+            // // Store user and bot messages in chat history
+            // setChatHistory([
+            //     ...chatHistory,
+            //     { userQuery: userQuery, botResponse: result }
+            // ]);
 
-            // Reset bot answers
-            setBotResponses([]);
+            // // Reset bot answers
+            // setBotResponses([]);
+            // ====================================================================================================
+
         } catch (error) {
             console.error('Error fetching bot response:', error);
         }
@@ -222,30 +233,67 @@ export default function Page({ params }: { params: { id: string } }) {
         // Remove all from idx to the end
         const n_chatHistory = chatHistory.slice(0, idx + 1);
 
+        // Test
+        // ====================================================================================================
         // Modify the last message
-        const result = randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
+        // const result = randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
 
-        // Split the result into an array of words
-        const words = result.split(' ');
 
-        // Display words one by one at intervals
-        for (let i = 0; i < words.length; i++) {
-            setTimeout(() => {
-                setBotResponses(prevAnswers => [
-                    ...prevAnswers,
-                    words[i]
-                ]);
-            }, Math.floor(Math.random() * 50) + 50 * i);
-        }
+        // // Split the result into an array of words
+        // const words = result.split(' ');
 
-        // Store user and bot messages in chat history
-        n_chatHistory[n_chatHistory.length - 1].botResponse = result;
+        // // Display words one by one at intervals
+        // for (let i = 0; i < words.length; i++) {
+        //     setTimeout(() => {
+        //         setBotResponses(prevAnswers => [
+        //             ...prevAnswers,
+        //             words[i]
+        //         ]);
+        //     }, Math.floor(Math.random() * 50) + 50 * i);
+        // }
 
-        // Reset bot answers
-        setBotResponses([]);
+        // // Store user and bot messages in chat history
+        // n_chatHistory[n_chatHistory.length - 1].botResponse = result;
 
-        // Update chat history
-        setChatHistory(n_chatHistory);
+        // // Reset bot answers
+        // setBotResponses([]);
+
+        // // Update chat history
+        // setChatHistory(n_chatHistory);
+        // ====================================================================================================
+
+        supabase.from("Server").select("server_url").eq("server_name", "Colab_Chatbot").then((r) => {
+            if (r.data && r.data.length > 0) {
+                const response = axios.post(r.data[0].server_url + '/chat/completions', {
+                    context: truncateDescription(post.description),
+                    userQuery: question
+                }).then((res) => {
+                    const result = res.data.result;
+                    console.log(result);
+                    // Split the result into an array of words
+                    const words = result.split(' ');
+
+                    // Display words one by one at intervals
+                    for (let i = 0; i < words.length; i++) {
+                        setTimeout(() => {
+                            setBotResponses(prevAnswers => [
+                                ...prevAnswers,
+                                words[i]
+                            ]);
+                        }, Math.floor(Math.random() * 50) + 50 * i);
+                    }
+
+                    // Store user and bot messages in chat history
+                    n_chatHistory[n_chatHistory.length - 1].botResponse = result;
+
+                    // Reset bot answers
+                    setBotResponses([]);
+
+                    // Update chat history
+                    setChatHistory(n_chatHistory);
+                });
+            }
+        });
     }
 
     // Handle Delete
@@ -351,18 +399,18 @@ export default function Page({ params }: { params: { id: string } }) {
                         <div className="text-2xl font-bold">
                             Maybe you are interested in
                         </div>
-                        <div className="shadow-md mt-4">
+                        <div className="border-[1.5px] border-[#9DC08B] rounded-md mt-4">
                             {
                                 recommendedDestinations.map((destination, index) => (
-                                    <div>
-                                        <div key={index} className="flex justify-between mt-4 p-4">
+                                    <div className="hover:bg-[#9DC08B] cursor-pointer" key={index}>
+                                        <div key={index} className="flex justify-between p-4">
                                             <div className="w-4/5">
                                                 <div className="text-lg font-semibold">
                                                     <a href={`/destination/${destination.id}`}>
                                                         {destination.destination}
                                                     </a>
                                                 </div>
-                                                <div>
+                                                <div className="text-sm">
                                                     {destination.title}
                                                 </div>
                                             </div>
@@ -374,9 +422,11 @@ export default function Page({ params }: { params: { id: string } }) {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="flex justify-center items-center">
-                                            <hr className="w-4/5 border-1 border-[#9DC08B]" />
-                                        </div>
+                                        {
+                                            index !== recommendedDestinations.length - 1 && (
+                                                <hr className="w-full border-1 border-[#9DC08B]" />
+                                            )
+                                        }
                                     </div>
                                 ))
                             }
