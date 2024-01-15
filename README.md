@@ -1,29 +1,24 @@
-# Redux Toolkit TypeScript Example
+# AITravelHub
 
-This example shows how to integrate Next.js with [Redux Toolkit](https://redux-toolkit.js.org).
+Welcome to AITravelHub, your go-to web app for intelligent travel assistance! AITravelHub leverages cutting-edge technologies, including natural language processing and computer vision, to provide users with an enhanced travel experience.
 
-The **Redux Toolkit** is a standardized way to write Redux logic (create actions and reducers, setup the store with some default middlewares like redux devtools extension). This example demonstrates each of these features with Next.js
+## Features
 
-## Deploy your own
+### 1. Effective Search Engine
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
+- Capable of understanding complex text and image queries, empowered by effective natural language processing and computer vision techniques
+- Supports searching for a variety of travel-related information, such as places, hotels, and restaurants
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-redux&project-name=with-redux&repository-name=with-redux)
+### 2. Chatbot for Q&A
 
-## How to use
+- Experience natural and context-aware conversations powered by the Mistral 7B large language model, ensuring comprehensive user input comprehension.
+- Get detailed answers related to search results, covering aspects like recommendations, reviews, and additional information on places.
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+### 3. Recommendation Algorithm
 
-```bash
-npx create-next-app --example with-redux with-redux-app
-```
+- Experience personalized travel recommendations based on an effective recommendation algorithm.
+- Find similar places tailored to your preferences, enhancing your travel planning.
 
-```bash
-yarn create next-app --example with-redux with-redux-app
-```
+### 4. Visual Question Answering Chatbot
 
-```bash
-pnpm create next-app --example with-redux with-redux-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+- The Visual Question Answering (VQA) chatbot is capable of understanding complex questions related to images, such as "What is the name of this place?" and "What is the rating of this place?"  
