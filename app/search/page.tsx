@@ -200,6 +200,7 @@ export default function Search() {
         setBlobUrl('');
       }
 
+      // Test
       setSearchResults(data);
     }
   };
