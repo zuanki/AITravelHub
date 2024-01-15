@@ -1,6 +1,7 @@
 'use client';
 import { BsArrowUpCircleFill } from "react-icons/bs";
 import React, { useState } from 'react';
+import { useEffect } from "react";
 import axios from "axios";
 import { SiCodemagic } from "react-icons/si";
 import { FaShare } from "react-icons/fa"; // Share
@@ -32,27 +33,82 @@ type Post = {
     description: string;
 };
 
+type SearchResult = {
+    score: number;
+    id: string;
+    destination: string;
+    title: string;
+    description: string;
+    image: string;
+};
+
+const p_data: SearchResult[] = [
+    {
+        "score": 0.9999999999999999,
+        "id": "G5651XC8",
+        "title": "",
+        "destination": "Hokkaido",
+        "image": "https://en.japantravel.com/photo/1655-215379/1440x960!/hokkaido-lake-toya-215379.jpg",
+        "description": "Hokkaido as Japan’s second largest island to the far north, has much wilderness to be explored.\nRenowned among tourists and locals alike for its abundance of powder snow and white landscapes, Hokkaido is always a popular choice for winter sports and scenery in places like Niseko and wetland Kushiro Shitsugen. Its attraction extends beyond nature to ramen and seafood such as crabs and sea urchins, which are of the highest quality in the frigid waters here.\nApart from its famed cuisine, parks and beautiful nature, Hokkaido is also steeped in history as the home of the indigenous Ainu people. Increasingly popular in seasons other than winter, more visitors have been flocking here for the delightful moss phlox and tulip fields in spring and a land that teems with life during summer."
+    },
+    {
+        "score": 0.8333333333333334,
+        "id": "R3U0Y210",
+        "title": "Hokkaido's second biggest city",
+        "destination": "Asahikawa",
+        "image": "https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg",
+        "description": "Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido"
+    }
+];
+
 
 
 export default function Page({ params }: { params: { id: string } }) {
     // const post = data.find((post) => post.id === params.id);
     // Query the database for a single post by id
     const [post, setPost] = useState<Post | null>(null);
-    React.useEffect(() => {
-        async function getPost() {
-            const { data } = await supabase
-                .from('destinations')
-                .select('id, title, destination, image, description')
-                .eq('id', params.id)
-                .single();
-            setPost(data);
-        }
-        getPost();
-    }, [params.id]);
-
     const [userQuery, setUserQuery] = useState('');
     const [botResponses, setBotResponses] = useState<string[]>([]);
     const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
+    // Recomended Destinations
+    const [recommendedDestinations, setRecommendedDestinations] = useState<SearchResult[]>([]);
+
+    useEffect(() => {
+        const getPost = async () => {
+            try {
+                const { data } = await supabase
+                    .from('destinations')
+                    .select('id, title, destination, image, description')
+                    .eq('id', params.id);
+
+                if (data && data.length > 0) {
+                    setPost(data[0]);
+
+                    const dataForm = {
+                        query: data[0].image,
+                        type: 'image',
+                    };
+
+                    console.log(dataForm);
+
+                    axios.post('http://localhost:5000/api/search', dataForm).then((res) => {
+                        setRecommendedDestinations(res.data);
+                        console.log(res.data);
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+
+                    // Test
+                    setRecommendedDestinations(p_data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getPost();
+    }, [params.id]);
+
 
     if (!post) {
         return (
@@ -206,9 +262,8 @@ export default function Page({ params }: { params: { id: string } }) {
     }
 
 
-
     return (
-        <div>
+        <div >
             <div className="mb-64">
                 <img
                     className="w-full h-60 object-cover"
@@ -216,8 +271,8 @@ export default function Page({ params }: { params: { id: string } }) {
                     alt={post.destination}
                 />
 
-                <div className="flex justify-between items-center">
-                    <div className="w-[800px] m-auto p-4">
+                <div className="flex justify-between">
+                    <div className="w-2/3 p-10">
                         <div className="text-4xl font-bold">
                             {post.destination}
                         </div>
@@ -292,7 +347,41 @@ export default function Page({ params }: { params: { id: string } }) {
                             ))
                         }
                     </div>
-
+                    <div className="w-1/3 p-10">
+                        <div className="text-2xl font-bold">
+                            Maybe you are interested in
+                        </div>
+                        <div className="shadow-md mt-4">
+                            {
+                                recommendedDestinations.map((destination, index) => (
+                                    <div>
+                                        <div key={index} className="flex justify-between mt-4 p-4">
+                                            <div className="w-4/5">
+                                                <div className="text-lg font-semibold">
+                                                    <a href={`/destination/${destination.id}`}>
+                                                        {destination.destination}
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                    {destination.title}
+                                                </div>
+                                            </div>
+                                            <div className="">
+                                                <img
+                                                    className="w-[100px] h-[100px] rounded-md"
+                                                    src={destination.image}
+                                                    alt={destination.destination}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-center items-center">
+                                            <hr className="w-4/5 border-1 border-[#9DC08B]" />
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -310,6 +399,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         <BsArrowUpCircleFill className="inline-block mr-2 text-4xl p-2 hover:bg-[#9DC08B] rounded-full cursor-pointer" />
                     </button>
                 </div>
+
             </div>
 
         </div >
