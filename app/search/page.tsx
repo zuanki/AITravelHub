@@ -17,6 +17,7 @@ import { AiOutlineDislike } from 'react-icons/ai';
 import { AiFillMessage } from 'react-icons/ai';
 import Chat from '../components/vqachat';
 import { NextUIProvider, Skeleton } from '@nextui-org/react';
+import { log } from 'console';
 
 type SearchResult = {
     score: number;
@@ -73,6 +74,8 @@ const getCurrentDatetime = (): string => {
 
 export default function Search() {
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
@@ -142,6 +145,12 @@ export default function Search() {
         if (event.type === 'click') {
             setIsLoaded(false);
             setSearchResults(data);
+            if (textareaRef.current) {
+                textareaRef.current.focus();
+                textareaRef.current.value = '';
+                textareaRef.current.style.height = 'auto';
+                textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+            }
             if (searchInput === '' && !fileImage) return;
             if (fileInputRef.current) {
                 fileInputRef.current.value = '';
@@ -205,7 +214,7 @@ export default function Search() {
             axios
                 .post('https://milvus-server.onrender.com/api/search', dataForm)
                 .then((response) => {
-                    if (response.data === 'Axios error!') {
+                    if (response.data === 'Server is busy!') {
                         setIsBusy(true);
                     } else {
                         setSearchResults(response.data);
@@ -255,6 +264,7 @@ export default function Search() {
             <div className='flex  items-center justify-center'>
                 <div className='w-[800px]  items-center justify-center rounded-md border-[1.5px] border-[#9DC08B] p-4'>
                     <textarea
+                        ref={textareaRef}
                         className='w-full resize-none overflow-hidden p-2 focus:right-0 focus:outline-none'
                         placeholder='Ask anything . . .'
                         onInput={autoResize}
