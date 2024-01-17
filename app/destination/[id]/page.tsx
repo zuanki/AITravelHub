@@ -1,6 +1,6 @@
 'use client';
 import { BsArrowUpCircleFill } from 'react-icons/bs';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { SiCodemagic } from 'react-icons/si';
@@ -13,7 +13,6 @@ import { MdDelete } from 'react-icons/md'; // Delete
 import supabase from '@/lib/supabase';
 import Markdown from 'react-markdown';
 import { NextUIProvider, Skeleton } from '@nextui-org/react';
-import { set } from 'firebase/database';
 
 const randomAnswers: string[] = [
     `- **Sushi:** *Delight in the exquisite flavors of Japan's iconic dish, sushi, with its perfect harmony of fresh fish, vinegared rice, and seaweed, showcasing the artistry of Japanese culinary tradition.*\n- **Manga:** *Immerse yourself in the captivating world of manga, where vivid illustrations and compelling storytelling converge, offering a unique and imaginative form of Japanese pop culture.*\n- **Cherry Blossoms:** *Witness the breathtaking beauty of cherry blossoms in spring, as these ephemeral flowers blanket the landscape in hues of pink, creating a magical and fleeting spectacle.*\n- **Samurai:** *Explore the rich history of Japan's legendary samurai warriors, known for their martial skills, honor code, and distinctive armor, leaving an indelible mark on the country's cultural heritage.*\n- **Zen Gardens:** *Find tranquility in the meticulous design of Zen gardens, where carefully arranged rocks, raked gravel, and lush greenery create a serene atmosphere, inviting contemplation and mindfulness.*`,
@@ -47,7 +46,7 @@ const p_data: SearchResult[] = [
     {
         score: 0.9999999999999999,
         id: 'G5651XC8',
-        title: '',
+        title: "Exploring Japan's Northern Frontier",
         destination: 'Hokkaido',
         image: 'https://en.japantravel.com/photo/1655-215379/1440x960!/hokkaido-lake-toya-215379.jpg',
         description:
@@ -71,19 +70,31 @@ const p_data: SearchResult[] = [
         description:
             'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
     },
+    {
+        score: 0.8333333333333334,
+        id: 'R3U0Y210',
+        title: "Hokkaido's second biggest city",
+        destination: 'Asahikawa',
+        image: 'https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg',
+        description:
+            'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
+    },
 ];
+
+let previousChatHistory: ChatHistory[] = [];
 
 export default function Page({ params }: { params: { id: string } }) {
     // const post = data.find((post) => post.id === params.id);
     // Query the database for a single post by id
     const [post, setPost] = useState<Post | null>(null);
     const [userQuery, setUserQuery] = useState('');
-    const [botResponses, setBotResponses] = useState<string[]>([]);
+    const [botResponses, setBotResponses] = useState<string[]>(['Hokkaido', 'Region']);
     const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
     // Recomended Destinations
     const [recommendedDestinations, setRecommendedDestinations] = useState<SearchResult[]>([]);
     const [isLoaded, setIsLoaded] = useState(true);
     const [isAsked, setIsAsked] = useState(true);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
         const getPost = async () => {
@@ -168,13 +179,20 @@ export default function Page({ params }: { params: { id: string } }) {
     // Get Answer
     const getAnswer = async (question: string) => {
         try {
+            setIsAsked(false);
+            const skeletonResult = randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
+
+            // Store user and bot messages in chat history
+            previousChatHistory = [...chatHistory];
+            setChatHistory([...chatHistory, { userQuery: userQuery, botResponse: skeletonResult }]);
+
             supabase
                 .from('Server')
                 .select('server_url')
                 .eq('server_name', 'Colab_Chatbot')
                 .then((r) => {
                     if (r.data && r.data.length > 0) {
-                        const response = axios
+                        axios
                             .post(r.data[0].server_url + '/chat/completions', {
                                 context: truncateDescription(post.description),
                                 userQuery: question,
@@ -182,6 +200,11 @@ export default function Page({ params }: { params: { id: string } }) {
                             .then((res) => {
                                 const result = res.data.result;
                                 console.log(result);
+
+                                // Store user and bot messages in chat history
+                                setChatHistory([...previousChatHistory, { userQuery: userQuery, botResponse: result }]);
+                                setIsAsked(true);
+
                                 // Split the result into an array of words
                                 const words = result.split(' ');
 
@@ -194,12 +217,6 @@ export default function Page({ params }: { params: { id: string } }) {
                                         Math.floor(Math.random() * 50) + 50 * i
                                     );
                                 }
-
-                                // Store user and bot messages in chat history
-                                setChatHistory([...chatHistory, { userQuery: userQuery, botResponse: result }]);
-
-                                // Reset bot answers
-                                setBotResponses([]);
                             });
                     }
                 });
@@ -235,7 +252,17 @@ export default function Page({ params }: { params: { id: string } }) {
     // Handle Button Click
     const handleButtonClick = async () => {
         if (!userQuery) return;
+        if (textareaRef.current) {
+            textareaRef.current.focus();
+            textareaRef.current.value = '';
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+
         await getAnswer(userQuery);
+
+        // Reset bot answers
+        setBotResponses(['Hokkaido', 'Region']);
         setUserQuery('');
     };
 
@@ -246,6 +273,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
     // Handle Rewriting
     const handleRewriting = async (idx: number) => {
+        setIsAsked(false);
         const question = chatHistory[idx].userQuery;
         // Remove all from idx to the end
         const n_chatHistory = chatHistory.slice(0, idx + 1);
@@ -313,6 +341,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
                             // Update chat history
                             setChatHistory(n_chatHistory);
+                            setIsAsked(true);
                         });
                 }
             });
@@ -322,6 +351,8 @@ export default function Page({ params }: { params: { id: string } }) {
     const handleDelete = (idx: number) => {
         // Remove idx from chat history
         const n_chatHistory = chatHistory.filter((_, index) => index !== idx);
+        const len = n_chatHistory.length;
+        if (len > 0) setBotResponses([n_chatHistory[len - 1].botResponse]);
         setChatHistory(n_chatHistory);
     };
 
@@ -362,36 +393,51 @@ export default function Page({ params }: { params: { id: string } }) {
                                                     {botResponses.join(' ')}
                                                 </Markdown>
                                             </Skeleton>
-                                            <Skeleton isLoaded={isAsked} className='mt-3 rounded-md'></Skeleton>
+                                            {isAsked === false ? (
+                                                <>
+                                                    <Skeleton isLoaded={false} className='mt-3 rounded-md'>
+                                                        <Markdown className='whitespace-pre-line'>
+                                                            Skeleton appear
+                                                        </Markdown>
+                                                    </Skeleton>
+                                                    <Skeleton
+                                                        isLoaded={false}
+                                                        className='mt-3 w-3/5 rounded-md py-2'
+                                                    ></Skeleton>
+                                                </>
+                                            ) : null}
                                         </>
                                     ) : (
-                                        <Skeleton isLoaded={isAsked}>
-                                            <Markdown className='whitespace-pre-line'>{message.botResponse}</Markdown>
-                                        </Skeleton>
+                                        <Markdown className='whitespace-pre-line'>{message.botResponse}</Markdown>
                                     )}
                                 </div>
-                                <div className='mb-8 mt-4 flex justify-between'>
-                                    <div className='justify-begin flex items-center'>
-                                        <button
-                                            className='justify-begin flex cursor-pointer items-center rounded-full pr-4 hover:bg-[#9DC08B]'
-                                            onClick={() => handleRewriting(index)}
-                                        >
-                                            <HiArrowPathRoundedSquare className='inline-block p-2 text-3xl ' />
-                                            <div>Rewrite</div>
-                                        </button>
+                                {isAsked === true || index !== chatHistory.length - 1 ? (
+                                    <div className='mb-8 mt-4 flex justify-between'>
+                                        <div className='justify-begin flex items-center'>
+                                            {index === chatHistory.length - 1 ? (
+                                                <button
+                                                    className='justify-begin flex cursor-pointer items-center rounded-full pr-4 hover:bg-[#9DC08B]'
+                                                    onClick={() => handleRewriting(index)}
+                                                >
+                                                    <HiArrowPathRoundedSquare className='inline-block p-2 text-3xl ' />
+                                                    <div>Rewrite</div>
+                                                </button>
+                                            ) : null}
+                                        </div>
+
+                                        <div className='justify-begin flex items-center'>
+                                            <button className='relative transform overflow-hidden transition-transform duration-300 hover:scale-110'>
+                                                <AiFillDislike className='mr-2 inline-block cursor-pointer rounded-full p-2 text-3xl hover:bg-[#9DC08B]' />
+                                            </button>
+                                            <button onClick={() => handleCopy(index)}>
+                                                <LuClipboardCopy className='mr-2 inline-block cursor-pointer rounded-full p-2 text-3xl hover:bg-[#9DC08B]' />
+                                            </button>
+                                            <button onClick={() => handleDelete(index)}>
+                                                <MdDelete className='mr-2 inline-block cursor-pointer rounded-full p-2 text-3xl hover:bg-[#9DC08B]' />
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className='justify-begin flex items-center'>
-                                        <button className='relative transform overflow-hidden transition-transform duration-300 hover:scale-110'>
-                                            <AiFillDislike className='mr-2 inline-block cursor-pointer rounded-full p-2 text-3xl hover:bg-[#9DC08B]' />
-                                        </button>
-                                        <button onClick={() => handleCopy(index)}>
-                                            <LuClipboardCopy className='mr-2 inline-block cursor-pointer rounded-full p-2 text-3xl hover:bg-[#9DC08B]' />
-                                        </button>
-                                        <button onClick={() => handleDelete(index)}>
-                                            <MdDelete className='mr-2 inline-block cursor-pointer rounded-full p-2 text-3xl hover:bg-[#9DC08B]' />
-                                        </button>
-                                    </div>
-                                </div>
+                                ) : null}
                                 <hr className='my-4 border-[1.5px] border-[#9DC08B]' />
                             </div>
                         ))}
@@ -403,14 +449,14 @@ export default function Page({ params }: { params: { id: string } }) {
                                 <div className='cursor-pointer hover:bg-[#9DC08B]' key={index}>
                                     <div key={index} className='flex justify-between p-4'>
                                         <div className='w-4/5'>
-                                            <Skeleton isLoaded={isLoaded} className='mb-2 mr-2 rounded-md text-lg'>
+                                            <Skeleton isLoaded={isLoaded} className='mb-2 mr-16 rounded-md text-lg'>
                                                 <div className='text-lg font-semibold'>
                                                     <a href={`/destination/${destination.id}`}>
                                                         {destination.destination}
                                                     </a>
                                                 </div>
                                             </Skeleton>
-                                            <Skeleton isLoaded={isLoaded} className='mr-4 rounded-md pb-5 text-sm'>
+                                            <Skeleton isLoaded={isLoaded} className='mr-2 rounded-md pb-4 text-sm'>
                                                 <div className='text-sm'>{destination.title}</div>
                                             </Skeleton>
                                         </div>
@@ -435,6 +481,7 @@ export default function Page({ params }: { params: { id: string } }) {
             <div className='fixed  bottom-0 left-0 flex w-full items-center justify-center'>
                 <div className='m-4 flex w-[600px] rounded-xl border-2 bg-white p-1'>
                     <textarea
+                        ref={textareaRef}
                         className='flex-grow resize-none overflow-hidden rounded-xl p-2 text-sm focus:right-0 focus:outline-none'
                         placeholder='Ask a follow-up . . .'
                         onInput={autoResize}
