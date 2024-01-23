@@ -19,6 +19,29 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json()); // support json encoded bodies
 
+function mergeItem(items) {
+  const result = {};
+
+  for (const item of items) {
+    const { destination, id, title, description, image } = item;
+
+    if (!result[destination]) {
+      result[destination] = {
+        destination,
+        id: [id],
+        title,
+        description,
+        image: [image],
+      };
+    } else {
+      result[destination].id.push(id);
+      result[destination].image.push(image);
+    }
+  }
+
+  return Object.values(result);
+}
+
 // POST /api/search
 app.post('/api/search', (req, res) => {
   const user_query = {
@@ -41,11 +64,13 @@ app.post('/api/search', (req, res) => {
               collection_name: 'JapanGuideImageEmbedding',
               data: vector,
               output_fields: ['destination', 'title', 'description', 'image'],
-              limit: 5,
+              limit: 100,
             })
             .then((searchResponse) => {
               // console.log(searchResponse);
-              res.json(searchResponse.results); // Send the searchResponse as JSON
+              // res.json(searchResponse.results); // Send the searchResponse as JSON
+              const result = mergeItem(searchResponse.results);
+              res.json(result);
             })
             .catch((searchErr) => {
               // console.log(searchErr);

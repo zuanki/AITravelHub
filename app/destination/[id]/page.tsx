@@ -13,6 +13,8 @@ import { MdDelete } from 'react-icons/md'; // Delete
 import supabase from '@/lib/supabase';
 import Markdown from 'react-markdown';
 import { NextUIProvider, Skeleton } from '@nextui-org/react';
+import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
 
 const randomAnswers: string[] = [
     `- **Sushi:** *Delight in the exquisite flavors of Japan's iconic dish, sushi, with its perfect harmony of fresh fish, vinegared rice, and seaweed, showcasing the artistry of Japanese culinary tradition.*\n- **Manga:** *Immerse yourself in the captivating world of manga, where vivid illustrations and compelling storytelling converge, offering a unique and imaginative form of Japanese pop culture.*\n- **Cherry Blossoms:** *Witness the breathtaking beauty of cherry blossoms in spring, as these ephemeral flowers blanket the landscape in hues of pink, creating a magical and fleeting spectacle.*\n- **Samurai:** *Explore the rich history of Japan's legendary samurai warriors, known for their martial skills, honor code, and distinctive armor, leaving an indelible mark on the country's cultural heritage.*\n- **Zen Gardens:** *Find tranquility in the meticulous design of Zen gardens, where carefully arranged rocks, raked gravel, and lush greenery create a serene atmosphere, inviting contemplation and mindfulness.*`,
@@ -34,52 +36,13 @@ type Post = {
 };
 
 type SearchResult = {
-    score: number;
-    id: string;
+    id: string[];
     destination: string;
     title: string;
     description: string;
-    image: string;
+    image: string[];
 };
 
-const p_data: SearchResult[] = [
-    {
-        score: 0.9999999999999999,
-        id: 'G5651XC8',
-        title: "Exploring Japan's Northern Frontier",
-        destination: 'Hokkaido',
-        image: 'https://en.japantravel.com/photo/1655-215379/1440x960!/hokkaido-lake-toya-215379.jpg',
-        description:
-            'Hokkaido as Japan’s second largest island to the far north, has much wilderness to be explored.\nRenowned among tourists and locals alike for its abundance of powder snow and white landscapes, Hokkaido is always a popular choice for winter sports and scenery in places like Niseko and wetland Kushiro Shitsugen. Its attraction extends beyond nature to ramen and seafood such as crabs and sea urchins, which are of the highest quality in the frigid waters here.\nApart from its famed cuisine, parks and beautiful nature, Hokkaido is also steeped in history as the home of the indigenous Ainu people. Increasingly popular in seasons other than winter, more visitors have been flocking here for the delightful moss phlox and tulip fields in spring and a land that teems with life during summer.',
-    },
-    {
-        score: 0.8333333333333334,
-        id: 'R3U0Y210',
-        title: "Hokkaido's second biggest city",
-        destination: 'Asahikawa',
-        image: 'https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg',
-        description:
-            'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
-    },
-    {
-        score: 0.8333333333333334,
-        id: 'R3U0Y210',
-        title: "Hokkaido's second biggest city",
-        destination: 'Asahikawa',
-        image: 'https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg',
-        description:
-            'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
-    },
-    {
-        score: 0.8333333333333334,
-        id: 'R3U0Y210',
-        title: "Hokkaido's second biggest city",
-        destination: 'Asahikawa',
-        image: 'https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg',
-        description:
-            'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
-    },
-];
 
 let previousChatHistory: ChatHistory[] = [];
 
@@ -96,11 +59,15 @@ export default function Page({ params }: { params: { id: string } }) {
     const [isAsked, setIsAsked] = useState(true);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    const [imageIndex, setImageIndex] = useState<number[]>([]);
+
+
+
     useEffect(() => {
         const getPost = async () => {
             try {
                 setIsLoaded(false);
-                setRecommendedDestinations(p_data);
+                // setRecommendedDestinations(p_data);
                 const { data } = await supabase
                     .from('destinations')
                     .select('id, title, destination, image, description')
@@ -117,9 +84,18 @@ export default function Page({ params }: { params: { id: string } }) {
                     console.log(dataForm);
 
                     axios
-                        .post('https://milvus-server.onrender.com/api/search', dataForm)
+                        .post('http://localhost:5000/api/search', dataForm)
                         .then((res) => {
-                            setRecommendedDestinations(res.data);
+                            let limit = 5;
+                            setRecommendedDestinations(res.data.slice(1, limit + 1));
+                            let temp: number[] = [];
+                            for (let i = 0; i < limit; i++) {
+                                temp.push(0);
+                            }
+
+                            setImageIndex(temp);
+                            console.log(imageIndex);
+
                             console.log(res.data);
                             setIsLoaded(true);
                         })
@@ -135,6 +111,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 console.error(error);
             }
         };
+
 
         getPost();
     }, [params.id]);
@@ -220,30 +197,6 @@ export default function Page({ params }: { params: { id: string } }) {
                             });
                     }
                 });
-
-            // Test
-            // ====================================================================================================
-            // const result = randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
-
-            // // Split the result into an array of words
-            // const words = result.split(' ');
-
-            // // Display words one by one at intervals
-            // for (let i = 0; i < words.length; i++) {
-            //     setTimeout(
-            //         () => {
-            //             setBotResponses((prevAnswers) => [...prevAnswers, words[i]]);
-            //         },
-            //         Math.floor(Math.random() * 50) + 50 * i
-            //     );
-            // }
-
-            // // Store user and bot messages in chat history
-            // setChatHistory([...chatHistory, { userQuery: userQuery, botResponse: result }]);
-
-            // // Reset bot answers
-            // setBotResponses([]);
-            // ====================================================================================================
         } catch (error) {
             console.error('Error fetching bot response:', error);
         }
@@ -277,34 +230,6 @@ export default function Page({ params }: { params: { id: string } }) {
         const question = chatHistory[idx].userQuery;
         // Remove all from idx to the end
         const n_chatHistory = chatHistory.slice(0, idx + 1);
-
-        // Test
-        // ====================================================================================================
-        // Modify the last message
-        // const result = randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
-
-        // // Split the result into an array of words
-        // const words = result.split(' ');
-
-        // // Display words one by one at intervals
-        // for (let i = 0; i < words.length; i++) {
-        //     setTimeout(() => {
-        //         setBotResponses(prevAnswers => [
-        //             ...prevAnswers,
-        //             words[i]
-        //         ]);
-        //     }, Math.floor(Math.random() * 50) + 50 * i);
-        // }
-
-        // // Store user and bot messages in chat history
-        // n_chatHistory[n_chatHistory.length - 1].botResponse = result;
-
-        // // Reset bot answers
-        // setBotResponses([]);
-
-        // // Update chat history
-        // setChatHistory(n_chatHistory);
-        // ====================================================================================================
 
         supabase
             .from('Server')
@@ -360,6 +285,43 @@ export default function Page({ params }: { params: { id: string } }) {
     const handleCopy = (idx: number) => {
         // Copy the bot response to clipboard
         navigator.clipboard.writeText(chatHistory[idx].botResponse);
+    };
+
+
+    // Handle click on left arrow
+    const handleLeftArrow = (idx: number) => {
+        if (imageIndex[idx] > 0) {
+            setImageIndex((prev) => {
+                let temp = [...prev];
+                temp[idx] -= 1;
+                return temp;
+            });
+        } else {
+            setImageIndex((prev) => {
+                let temp = [...prev];
+                temp[idx] = recommendedDestinations[idx].image.length - 1;
+                return temp;
+            });
+        }
+    };
+
+    console.log(imageIndex);
+
+    // Handle click on right arrow
+    const handleRightArrow = (idx: number) => {
+        if (imageIndex[idx] < recommendedDestinations[idx].image.length - 1) {
+            setImageIndex((prev) => {
+                let temp = [...prev];
+                temp[idx] += 1;
+                return temp;
+            });
+        } else {
+            setImageIndex((prev) => {
+                let temp = [...prev];
+                temp[idx] = 0;
+                return temp;
+            });
+        }
     };
 
     return (
@@ -446,11 +408,11 @@ export default function Page({ params }: { params: { id: string } }) {
                         <div className='text-2xl font-bold'>Maybe you are interested in</div>
                         <div className='mt-4 rounded-md border-[1.5px] border-[#9DC08B]'>
                             {recommendedDestinations.map((destination, index) => (
-                                <div className='cursor-pointer hover:bg-[#9DC08B]' key={index}>
+                                <div className=' hover:bg-[#9DC08B]' key={index}>
                                     <div key={index} className='flex justify-between p-4'>
                                         <div className='w-4/5'>
                                             <Skeleton isLoaded={isLoaded} className='mb-2 mr-16 rounded-md text-lg'>
-                                                <div className='text-lg font-semibold'>
+                                                <div className='text-lg font-semibold cursor-pointer'>
                                                     <a href={`/destination/${destination.id}`}>
                                                         {destination.destination}
                                                     </a>
@@ -461,11 +423,34 @@ export default function Page({ params }: { params: { id: string } }) {
                                             </Skeleton>
                                         </div>
                                         <Skeleton isLoaded={isLoaded} className='rounded-md'>
-                                            <img
+                                            {/* <img
                                                 className='h-[100px] w-[200px] rounded-md'
-                                                src={destination.image}
+                                                src={destination.image[0]}
                                                 alt={destination.destination}
-                                            />
+                                            /> */}
+                                            <div className='relative'>
+                                                <img
+                                                    src={destination.image[imageIndex[index]]}
+                                                    alt={destination.description}
+                                                    className='h-[100px] w-[200px] rounded-lg'
+                                                />
+                                                {recommendedDestinations[index].image.length > 1 && (
+                                                    <div className='flex items-center justify-between absolute inset-0'>
+                                                        <button
+                                                            onClick={() => handleLeftArrow(index)}
+                                                            className='arrow-button left-arrow opacity-0 group-hover:opacity-100 transition-opacity'
+                                                        >
+                                                            <FaChevronLeft className='text-xl text-[#9DC08B]' />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleRightArrow(index)}
+                                                            className='arrow-button right-arrow opacity-0 group-hover:opacity-100 transition-opacity'
+                                                        >
+                                                            <FaChevronRight className='text-xl text-[#9DC08B]' />
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </Skeleton>
                                     </div>
                                     {index !== recommendedDestinations.length - 1 && (

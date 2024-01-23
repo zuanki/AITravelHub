@@ -18,54 +18,16 @@ import { AiFillMessage } from 'react-icons/ai';
 import Chat from '../components/vqachat';
 import { NextUIProvider, Skeleton } from '@nextui-org/react';
 import { log } from 'console';
+import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
 
 type SearchResult = {
-    score: number;
-    id: string;
+    id: string[];
     destination: string;
     title: string;
     description: string;
-    image: string;
+    image: string[];
 };
-
-const data: SearchResult[] = [
-    {
-        score: 0.9999999999999999,
-        id: 'G5651XC8',
-        title: '',
-        destination: 'Hokkaido',
-        image: 'https://en.japantravel.com/photo/1655-215379/1440x960!/hokkaido-lake-toya-215379.jpg',
-        description:
-            'Hokkaido as Japan’s second largest island to the far north, has much wilderness to be explored.\nRenowned among tourists and locals alike for its abundance of powder snow and white landscapes, Hokkaido is always a popular choice for winter sports and scenery in places like Niseko and wetland Kushiro Shitsugen. Its attraction extends beyond nature to ramen and seafood such as crabs and sea urchins, which are of the highest quality in the frigid waters here.\nApart from its famed cuisine, parks and beautiful nature, Hokkaido is also steeped in history as the home of the indigenous Ainu people. Increasingly popular in seasons other than winter, more visitors have been flocking here for the delightful moss phlox and tulip fields in spring and a land that teems with life during summer.',
-    },
-    {
-        score: 0.8333333333333334,
-        id: 'R3U0Y210',
-        title: "Hokkaido's second biggest city",
-        destination: 'Asahikawa',
-        image: 'https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg',
-        description:
-            'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
-    },
-    {
-        score: 0.8333333333333334,
-        id: 'ZMZ2UMGU',
-        title: 'Many cute animals for you to make friends up close',
-        destination: 'Hokkaido: Asahiyama Zoo in Summer',
-        image: 'https://a1.cdn.japantravel.com/photo/10331-63336/360x240!/hokkaido-สวนสัตว์-asahiyama-ในฤดูร้อน-63336.jpg',
-        description:
-            "Asahiyama Zoo is an interesting place to visit near Asahikawa. It is a place you can go spend an entire day without getting bored. It's more popular in winter as there is a special penguin parade show. However, in summer, this place is not any less fun to visit. Aside from the many animals (both local Hokkaido species and animals from around the world), the key highlight of this place is the many interesting and up close ways you can interact with the animals that are unlike any other zoos.",
-    },
-    {
-        score: 0.8333333333333334,
-        id: 'JA54JMFA',
-        title: 'Many cute animals for you to make friends up close',
-        destination: 'Hokkaido: Asahiyama Zoo in Summer',
-        image: 'https://a1.cdn.japantravel.com/photo/10331-63336/1000/hokkaido-สวนสัตว์-asahiyama-ในฤดูร้อน-63336.jpg',
-        description:
-            "Asahiyama Zoo is an interesting place to visit near Asahikawa. It is a place you can go spend an entire day without getting bored. It's more popular in winter as there is a special penguin parade show. However, in summer, this place is not any less fun to visit. Aside from the many animals (both local Hokkaido species and animals from around the world), the key highlight of this place is the many interesting and up close ways you can interact with the animals that are unlike any other zoos.",
-    },
-];
 
 const getCurrentDatetime = (): string => {
     const date = new Date();
@@ -144,7 +106,7 @@ export default function Search() {
     ) => {
         if (event.type === 'click') {
             setIsLoaded(false);
-            setSearchResults(data);
+            // setSearchResults(data);
             if (textareaRef.current) {
                 textareaRef.current.focus();
                 textareaRef.current.value = '';
@@ -212,12 +174,12 @@ export default function Search() {
             }
             console.log(dataForm);
             axios
-                .post('https://milvus-server.onrender.com/api/search', dataForm)
+                .post('http://localhost:5000/api/search', dataForm)
                 .then((response) => {
                     if (response.data === 'Server is busy!') {
                         setIsBusy(true);
                     } else {
-                        setSearchResults(response.data);
+                        setSearchResults(response.data.slice(0, 20));
                         setIsLoaded(true);
                         setIsBusy(false);
                     }
@@ -230,12 +192,6 @@ export default function Search() {
                 URL.revokeObjectURL(blobUrl);
                 setBlobUrl('');
             }
-
-            // Test
-            // ====================================================================================================
-            // setSearchResults(data);
-            // setIsLoaded(true);
-            // ====================================================================================================
         }
     };
 
@@ -256,6 +212,52 @@ export default function Search() {
     // Handle VQA Modal
     const handleVQAChat = () => {
         setOpenVQAChat(!openVQAChat);
+    };
+
+
+    const [imageIndex, setImageIndex] = useState<number[]>([]);
+
+    // Initialize imageIndex
+    useEffect(() => {
+        let temp: number[] = [];
+        for (let i = 0; i < searchResults.length; i++) {
+            temp.push(0);
+        }
+        setImageIndex(temp);
+    }, [searchResults]);
+
+    // Handle click on left arrow
+    const handleLeftArrow = (idx: number) => {
+        if (imageIndex[idx] > 0) {
+            setImageIndex((prev) => {
+                let temp = [...prev];
+                temp[idx] -= 1;
+                return temp;
+            });
+        } else {
+            setImageIndex((prev) => {
+                let temp = [...prev];
+                temp[idx] = searchResults[idx].image.length - 1;
+                return temp;
+            });
+        }
+    };
+
+    // Handle click on right arrow
+    const handleRightArrow = (idx: number) => {
+        if (imageIndex[idx] < searchResults[idx].image.length - 1) {
+            setImageIndex((prev) => {
+                let temp = [...prev];
+                temp[idx] += 1;
+                return temp;
+            });
+        } else {
+            setImageIndex((prev) => {
+                let temp = [...prev];
+                temp[idx] = 0;
+                return temp;
+            });
+        }
     };
 
     return (
@@ -341,17 +343,35 @@ export default function Search() {
                                         <div key={idx} className='z-0'>
                                             <div className='my-4 flex items-center'>
                                                 <Skeleton isLoaded={isLoaded} className='rounded-md'>
-                                                    <img
-                                                        src={result.image}
-                                                        alt={result.description}
-                                                        className='h-[100px]  w-[200px] rounded-lg'
-                                                    />
+                                                    <div className='relative'>
+                                                        <img
+                                                            src={result.image[imageIndex[idx]]}
+                                                            alt={result.description}
+                                                            className='h-[100px] w-[200px] rounded-lg'
+                                                        />
+                                                        {searchResults[idx].image.length > 1 && (
+                                                            <div className='flex items-center justify-between absolute inset-0'>
+                                                                <button
+                                                                    onClick={() => handleLeftArrow(idx)}
+                                                                    className='arrow-button left-arrow opacity-0 group-hover:opacity-100 transition-opacity'
+                                                                >
+                                                                    <FaChevronLeft className='text-xl text-[#9DC08B]' />
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleRightArrow(idx)}
+                                                                    className='arrow-button right-arrow opacity-0 group-hover:opacity-100 transition-opacity'
+                                                                >
+                                                                    <FaChevronRight className='text-xl text-[#9DC08B]' />
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </Skeleton>
                                                 <div className='ml-4 flex w-full flex-col justify-center'>
                                                     <div className='mb-2 flex w-full items-center justify-between'>
                                                         <Skeleton isLoaded={isLoaded} className='rounded-md'>
                                                             <div className='text-lg font-bold'>
-                                                                <a href={`/destination/${result.id}`}>
+                                                                <a href={`/destination/${result.id[0]}`}>
                                                                     {result.destination}
                                                                 </a>
                                                             </div>
