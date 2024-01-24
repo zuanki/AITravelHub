@@ -111,9 +111,15 @@ export default function Chat() {
     };
 
     // Handle input change
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setInput(e.target.value);
         setIsSubmit(false);
+    };
+
+    // Auto Resize Textarea
+    const autoResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        e.target.style.height = 'auto';
+        e.target.style.height = e.target.scrollHeight + 'px';
     };
 
     // Handle keydown
@@ -184,7 +190,7 @@ export default function Chat() {
             // POST
             let dataForm = {
                 prompt: input,
-                // url: urlImage
+                url: urlImage
                 // url: "https://media.cntraveler.com/photos/63482b255e7943ad4006df0b/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg"
             };
             // if (fileImage) {
@@ -239,38 +245,38 @@ export default function Chat() {
                     <input
                         ref={fileInputRef}
                         type='file'
-                        name=''
-                        id='file'
+                        name='fileVQA'
+                        id='fileVQA'
                         hidden
                         onChange={(e) => addFileImage(e)}
                     />
-                    {fileImageChat && (
-                        <div className='flex p-2'>
-                            <div className='relative h-12'>
-                                <Image
-                                    src={blobUrl}
-                                    alt='file image'
-                                    width={1000}
-                                    height={1000}
-                                    className='h-12 w-12 rounded-lg '
-                                />
-                                <button onClick={() => popFileImage()}>
-                                    <IoIosCloseCircle className='absolute -right-2 -top-2 text-[#9DC08B]' />
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                    <label className='flex items-center text-xl mt-2 mr-1 rounded cursor-pointer hover:bg-[#9DC08B]' htmlFor='file'>
+                    <label className='flex items-center text-xl mt-2 mr-2 rounded cursor-pointer hover:bg-[#9DC08B]' htmlFor='fileVQA'>
                         <CiCirclePlus />
                     </label>
                 </div>
-                <input
-                    className="w-full mt-2 p-2 rounded-md border-[1.5px] mr-2 focus:outline-none focus:ring-1 focus:ring-[#9DC08B]"
-                    type="text"
-                    placeholder="Enter your message here"
-                    value={input}
-                    onChange={handleInputChange}
-                />
+                <div className='flex-1 relative'>
+                    {fileImageChat && (
+                        <div className='absolute bottom-12'>
+                            <Image
+                                src={blobUrl}
+                                alt='file image'
+                                width={1000}
+                                height={1000}
+                                className='h-12 w-12 rounded-lg'
+                            />
+                            <button onClick={() => popFileImage()}>
+                                <IoIosCloseCircle className='absolute -right-2 -top-2 text-[#9DC08B]' />
+                            </button>
+                        </div>
+                    )}
+                    <textarea
+                        ref={textareaRef}
+                        className="w-full overflow-hidden text-justify row-span-2 mt-2 p-2 rounded-md border-[1.5px] mr-2 focus:outline-none focus:ring-1 focus:ring-[#9DC08B]"
+                        placeholder="Enter your message here"
+                        value={input}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange(e)}
+                    />
+                </div>
                 <button
                     type="button"
                     className="bg-[#9DC08B] hover:bg-[#40513B] text-white text-xs font-bold py-2 px-2 rounded mt-2 ml-2"

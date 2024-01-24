@@ -10,14 +10,12 @@ import axios from 'axios';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/firebase/config';
 import moment from 'moment';
-import { set } from 'firebase/database';
 import { TbGridDots } from 'react-icons/tb';
 import { AiOutlineLike } from 'react-icons/ai';
 import { AiOutlineDislike } from 'react-icons/ai';
 import { AiFillMessage } from 'react-icons/ai';
 import Chat from '../components/vqachat';
 import { NextUIProvider, Skeleton } from '@nextui-org/react';
-import { log } from 'console';
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
 
@@ -91,6 +89,7 @@ export default function Search() {
     const [fileImage, setFileImage] = useState<File | null>(null);
 
     const addFileImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        clearSearchResults();
         let file = e.target.files?.[0] as File;
         if (file) {
             setBlobUrl(URL.createObjectURL(file));
@@ -124,8 +123,7 @@ export default function Search() {
         setUrlImage('');
         setSearchResults([]);
         setIsSubmit(false);
-        setPreviousInput('');
-        setSearchInput('');
+        setIsBusy(false);
     };
 
     // Handle keydown
@@ -304,8 +302,7 @@ export default function Search() {
                         value={searchInput}
                         onChange={(e) => {
                             setSearchInput(e.target.value);
-                            setIsSubmit(false);
-                            setUrlImage('');
+                            clearSearchResults();
                         }}
                         onKeyDown={handleKeyDown}
                     />
@@ -313,7 +310,7 @@ export default function Search() {
                         <input
                             ref={fileInputRef}
                             type='file'
-                            name=''
+                            name='file'
                             id='file'
                             hidden
                             onChange={(e) => addFileImage(e)}
@@ -438,7 +435,7 @@ export default function Search() {
                 <AiFillMessage className='text-4xl text-[#9DC08B]' />
             </button>
             {openVQAChat && (
-                <div className='fixed bottom-12 right-12 h-[500px] w-[400px] rounded-md border-[1.5px] border-[#9DC08B] bg-white px-6 py-4 text-sm  shadow-xl'>
+                <div className='fixed bottom-12 right-12 h-[510px] w-[400px] rounded-md border-[1.5px] border-[#9DC08B] bg-white px-6 py-4 text-sm shadow-xl'>
                     <Chat />
                 </div>
             )}
