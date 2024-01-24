@@ -43,6 +43,40 @@ type SearchResult = {
     image: string[];
 };
 
+const p_data: SearchResult[] = [
+    {
+        id: ['G5651XC8'],
+        title: "Exploring Japan's Northern Frontier",
+        destination: 'Hokkaido',
+        image: ['https://en.japantravel.com/photo/1655-215379/1440x960!/hokkaido-lake-toya-215379.jpg'],
+        description: 'Hokkaido as Japan’s second largest island to the far north, has much wilderness to be explored.\nRenowned among tourists and locals alike for its abundance of powder snow and white landscapes, Hokkaido is always a popular choice for winter sports and scenery in places like Niseko and wetland Kushiro Shitsugen. Its attraction extends beyond nature to ramen and seafood such as crabs and sea urchins, which are of the highest quality in the frigid waters here.\nApart from its famed cuisine, parks and beautiful nature, Hokkaido is also steeped in history as the home of the indigenous Ainu people. Increasingly popular in seasons other than winter, more visitors have been flocking here for the delightful moss phlox and tulip fields in spring and a land that teems with life during summer.',
+    },
+    {
+        id: ['R3U0Y210'],
+        title: "Hokkaido's second biggest city",
+        destination: 'Asahikawa',
+        image: ['https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg'],
+        description: 'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
+    },
+    {
+        id: ['R3U0Y210'],
+        title: "Hokkaido's second biggest city",
+        destination: 'Asahikawa',
+        image: ['https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg'],
+        description: 'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
+    },
+    {
+        id: ['R3U0Y210'],
+        title: "Hokkaido's second biggest city",
+        destination: 'Asahikawa',
+        image: ['https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg'],
+        description: 'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
+    },
+];
+
+function formatLink(link: string) {
+    return link.replace(/(\d+)x(\d+)!/, "0x0!").replace("/1000/", "/0x0!/");
+}
 
 let previousChatHistory: ChatHistory[] = [];
 
@@ -51,8 +85,9 @@ export default function Page({ params }: { params: { id: string } }) {
     // Query the database for a single post by id
     const [post, setPost] = useState<Post | null>(null);
     const [userQuery, setUserQuery] = useState('');
-    const [botResponses, setBotResponses] = useState<string[]>(['Hokkaido', 'Region']);
+    const [botResponses, setBotResponses] = useState<string[]>([]);
     const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
+
     // Recomended Destinations
     const [recommendedDestinations, setRecommendedDestinations] = useState<SearchResult[]>([]);
     const [isLoaded, setIsLoaded] = useState(true);
@@ -61,60 +96,59 @@ export default function Page({ params }: { params: { id: string } }) {
 
     const [imageIndex, setImageIndex] = useState<number[]>([]);
 
-
-
     useEffect(() => {
         const getPost = async () => {
             try {
                 setIsLoaded(false);
-                // setRecommendedDestinations(p_data);
-                const { data } = await supabase
+                setRecommendedDestinations(p_data);
+
+                const destinationRoot = await supabase
                     .from('destinations')
                     .select('id, title, destination, image, description')
-                    .eq('id', params.id);
-
+                    .eq('id', params.id)
+                const { data } = destinationRoot;
                 if (data && data.length > 0) {
                     setPost(data[0]);
 
-                    const dataForm = {
+                    const dataFormImage = {
                         query: data[0].image,
                         type: 'image',
                     };
 
-                    console.log(dataForm);
+                    const dataFormText = {
+                        query: data[0].destination,
+                        type: 'text',
+                    };
 
-                    axios
-                        .post('http://localhost:5000/api/search', dataForm)
-                        .then((res) => {
-                            let limit = 5;
-                            setRecommendedDestinations(res.data.slice(1, limit + 1));
-                            let temp: number[] = [];
-                            for (let i = 0; i < limit; i++) {
-                                temp.push(0);
-                            }
+                    let mixRecommendation: SearchResult[] = [];
+                    let temp: number[] = [];
 
-                            setImageIndex(temp);
-                            console.log(imageIndex);
 
-                            console.log(res.data);
-                            setIsLoaded(true);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
+                    const resImage = await axios.post('https://milvus-server.onrender.com/api/search', dataFormImage)
+                    let limit = 5;
+                    if (Array.isArray(resImage.data)) mixRecommendation = [...mixRecommendation, ...resImage.data.slice(1, limit + 1)];
+                    for (let i = 0; i < resImage.data.length; i++) {
+                        temp.push(0);
+                    }
 
-                    // Test
-                    // setRecommendedDestinations(p_data);
-                    // setIsLoaded(true);
+                    const resText = await axios.post('https://milvus-server.onrender.com/api/search', dataFormText)
+                    if (Array.isArray(resText.data)) mixRecommendation = [...mixRecommendation, ...resText.data.slice(1, limit + 1)];
+                    for (let i = 0; i < resText.data.length; i++) {
+                        temp.push(0);
+                    }
+
+                    setImageIndex(temp);
+                    setIsLoaded(true);
+                    setRecommendedDestinations([...mixRecommendation]);
                 }
+
             } catch (error) {
                 console.error(error);
             }
         };
 
-
         getPost();
-    }, [params.id]);
+    }, []);
 
     if (!post) {
         return (
@@ -179,7 +213,6 @@ export default function Page({ params }: { params: { id: string } }) {
                                 console.log(result);
 
                                 // Store user and bot messages in chat history
-                                setChatHistory([...previousChatHistory, { userQuery: userQuery, botResponse: result }]);
                                 setIsAsked(true);
 
                                 // Split the result into an array of words
@@ -190,6 +223,11 @@ export default function Page({ params }: { params: { id: string } }) {
                                     setTimeout(
                                         () => {
                                             setBotResponses((prevAnswers) => [...prevAnswers, words[i]]);
+                                            if (i === words.length - 1) {
+                                                // Reset bot answers
+                                                setChatHistory([...previousChatHistory, { userQuery: userQuery, botResponse: result }]);
+                                                setUserQuery('');
+                                            }
                                         },
                                         Math.floor(Math.random() * 50) + 50 * i
                                     );
@@ -212,11 +250,8 @@ export default function Page({ params }: { params: { id: string } }) {
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
         }
 
+        setBotResponses([]);
         await getAnswer(userQuery);
-
-        // Reset bot answers
-        setBotResponses(['Hokkaido', 'Region']);
-        setUserQuery('');
     };
 
     // Truncate context (description) to 1000 characters
@@ -305,8 +340,6 @@ export default function Page({ params }: { params: { id: string } }) {
         }
     };
 
-    console.log(imageIndex);
-
     // Handle click on right arrow
     const handleRightArrow = (idx: number) => {
         if (imageIndex[idx] < recommendedDestinations[idx].image.length - 1) {
@@ -327,7 +360,7 @@ export default function Page({ params }: { params: { id: string } }) {
     return (
         <NextUIProvider>
             <div className='mb-64'>
-                <img className='h-60 w-full object-cover' src={post.image} alt={post.destination} />
+                <img className='h-80 w-full object-cover' src={formatLink(post.image)} alt={post.destination} />
 
                 <div className='flex justify-between'>
                     <div className='w-2/3 p-10'>
@@ -341,7 +374,7 @@ export default function Page({ params }: { params: { id: string } }) {
                         <div className='mt-4 whitespace-pre-line text-sm text-gray-500'>{post.description}</div>
                         <hr className='my-4 border-[1.5px] border-[#9DC08B]' />
                         {chatHistory.map((message, index) => (
-                            <div key={index} className=' w-full text-sm'>
+                            <div key={message.botResponse} className=' w-full text-sm'>
                                 <div className='my-4 text-2xl font-semibold'>{message.userQuery}</div>
                                 <div className='my-1'>
                                     <div className='justify-begin my-2 flex  items-center font-semibold'>
@@ -409,11 +442,11 @@ export default function Page({ params }: { params: { id: string } }) {
                         <div className='mt-4 rounded-md border-[1.5px] border-[#9DC08B]'>
                             {recommendedDestinations.map((destination, index) => (
                                 <div className=' hover:bg-[#9DC08B]' key={index}>
-                                    <div key={index} className='flex justify-between p-4'>
+                                    <div className='flex justify-between p-4'>
                                         <div className='w-4/5'>
                                             <Skeleton isLoaded={isLoaded} className='mb-2 mr-16 rounded-md text-lg'>
                                                 <div className='text-lg font-semibold cursor-pointer'>
-                                                    <a href={`/destination/${destination.id}`}>
+                                                    <a href={`/destination/${destination.id[0]}`}>
                                                         {destination.destination}
                                                     </a>
                                                 </div>
