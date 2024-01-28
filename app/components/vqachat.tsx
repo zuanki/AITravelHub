@@ -111,10 +111,10 @@ export default function Chat() {
     };
 
     // Handle input change
-    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
         setIsSubmit(false);
-    };
+    }
 
     // Auto Resize Textarea
     const autoResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -269,12 +269,12 @@ export default function Chat() {
                             </button>
                         </div>
                     )}
-                    <textarea
-                        ref={textareaRef}
+                    <input
+                        // ref={textareaRef}
                         className="w-full overflow-hidden text-justify row-span-2 mt-2 p-2 rounded-md border-[1.5px] mr-2 focus:outline-none focus:ring-1 focus:ring-[#9DC08B]"
                         placeholder="Enter your message here"
                         value={input}
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange(e)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(e)}
                     />
                 </div>
                 <button
