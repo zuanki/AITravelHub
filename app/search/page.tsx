@@ -13,11 +13,11 @@ import { TbGridDots } from 'react-icons/tb';
 import { AiOutlineLike } from 'react-icons/ai';
 import { AiOutlineDislike } from 'react-icons/ai';
 import { AiFillMessage } from 'react-icons/ai';
-import Chat from '../components/VQAChat';
 import { NextUIProvider, Skeleton } from '@nextui-org/react';
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
 import { SearchResult } from '@/types/search-result';
+import Chat from '../components/vqachat';
 import { mockChatBotAnswers, mockSearchResults } from '@/public/data/mockData'; // Mock data for skeleton loading
 
 const getCurrentDatetime = (): string => {
