@@ -33,6 +33,10 @@ const getCurrentDatetime = (): string => {
 };
 
 export default function Chat() {
+    let resMsg = '';
+
+    let url = 'https://media.cntraveler.com/photos/63482b255e7943ad4006df0b/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg';
+
     const [chatHistory, setChatHistory] = useState<ChatProps[]>(data);
 
     const [input, setInput] = useState<string>('');
@@ -88,18 +92,16 @@ export default function Chat() {
             ...prev,
             { message: message, isBot: false },
         ]);
+    }
 
-        // Bot replies after 1 second
-        setTimeout(() => {
-            setChatHistory((prev) => [
-                ...prev,
-                {
-                    // 
-                    message: result,
-                    isBot: true,
-                },
-            ]);
-        }, 1000);
+    const sendBotMessage = (message: string) => {
+        setChatHistory((prev) => [
+            ...prev,
+            {
+                message: message,
+                isBot: true,
+            },
+        ]);
     }
 
     // Handle send message
@@ -177,32 +179,30 @@ export default function Chat() {
                         }
                     );
                 });
+                url = await promiseUpload;
             } else {
                 setIsSubmit(true);
             }
 
-            const url = await promiseUpload;
+            // url = await promiseUpload;
             setUrlImage(url);
             setIsSubmit(true);
-            clearInputs();
             handleSendMessage();
+            clearInputs();
 
             // POST
             let dataForm = {
                 prompt: input,
-                url: urlImage
+                url: url
                 // url: "https://media.cntraveler.com/photos/63482b255e7943ad4006df0b/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg"
             };
-            // if (fileImage) {
-            //     dataForm = {
-            //         prompt: url,
-            //     };
-            // }
 
             axios.post('/api/vqa', dataForm).then((res) => {
                 console.log(res.data);
                 // setResult(res.data.text);
                 // console.log(result);
+                resMsg = res.data.text
+                sendBotMessage(resMsg);
                 setIsLoaded(true);
             });
             console.log(dataForm);
