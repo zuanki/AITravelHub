@@ -26,10 +26,9 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 
-# Get and return the sum of two numbers
 @app.route('/api/embedding', methods=['POST'])
 @cross_origin()
-def add():
+def embedding():
     # Message format
     # {
     #     "query": "Hello World" | "https://www.google.com/example.png",

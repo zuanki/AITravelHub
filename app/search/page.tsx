@@ -1,5 +1,4 @@
 'use client';
-
 import Image from 'next/image';
 import React, { useEffect, useState, useRef } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
@@ -14,49 +13,12 @@ import { TbGridDots } from 'react-icons/tb';
 import { AiOutlineLike } from 'react-icons/ai';
 import { AiOutlineDislike } from 'react-icons/ai';
 import { AiFillMessage } from 'react-icons/ai';
-import Chat from '../components/vqachat';
 import { NextUIProvider, Skeleton } from '@nextui-org/react';
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
-
-type SearchResult = {
-    id: string[];
-    destination: string;
-    title: string;
-    description: string;
-    image: string[];
-};
-
-const data: SearchResult[] = [
-    {
-        id: ['G5651XC8'],
-        title: "Exploring Japan's Northern Frontier",
-        destination: 'Hokkaido',
-        image: ['https://en.japantravel.com/photo/1655-215379/1440x960!/hokkaido-lake-toya-215379.jpg'],
-        description: 'Hokkaido as Japan’s second largest island to the far north, has much wilderness to be explored.\nRenowned among tourists and locals alike for its abundance of powder snow and white landscapes, Hokkaido is always a popular choice for winter sports and scenery in places like Niseko and wetland Kushiro Shitsugen. Its attraction extends beyond nature to ramen and seafood such as crabs and sea urchins, which are of the highest quality in the frigid waters here.\nApart from its famed cuisine, parks and beautiful nature, Hokkaido is also steeped in history as the home of the indigenous Ainu people. Increasingly popular in seasons other than winter, more visitors have been flocking here for the delightful moss phlox and tulip fields in spring and a land that teems with life during summer.',
-    },
-    {
-        id: ['R3U0Y210'],
-        title: "Hokkaido's second biggest city",
-        destination: 'Asahikawa',
-        image: ['https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg'],
-        description: 'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
-    },
-    {
-        id: ['R3U0Y210'],
-        title: "Hokkaido's second biggest city",
-        destination: 'Asahikawa',
-        image: ['https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg'],
-        description: 'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
-    },
-    {
-        id: ['R3U0Y210'],
-        title: "Hokkaido's second biggest city",
-        destination: 'Asahikawa',
-        image: ['https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg'],
-        description: 'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
-    },
-];
+import { SearchResult } from '@/types/search-result';
+import Chat from '../components/vqachat';
+import { mockChatBotAnswers, mockSearchResults } from '@/public/data/mockData'; // Mock data for skeleton loading
 
 const getCurrentDatetime = (): string => {
     const date = new Date();
@@ -135,7 +97,7 @@ export default function Search() {
     ) => {
         if (event.type === 'click') {
             setIsLoaded(false);
-            setSearchResults(data);
+            setSearchResults(mockSearchResults);
             if (textareaRef.current) {
                 textareaRef.current.focus();
                 textareaRef.current.value = '';
@@ -351,6 +313,13 @@ export default function Search() {
             <div className='mt-10 flex items-center justify-center'>
                 <div className='w-[800px] '>
                     <div className='text-xl font-bold'>
+                        {
+                            urlImage && (
+                                <div className=''>
+                                    <img src={urlImage} alt='url image' className='h-[100px] w-[155px] mb-4 rounded-lg' />
+                                </div>
+                            )
+                        }
                         <div className='flex items-center'>
                             <TbGridDots />
                             <p className='ml-2'>Search Results</p>

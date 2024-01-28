@@ -4,79 +4,20 @@ import React, { useState, useRef } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { SiCodemagic } from 'react-icons/si';
-import { FaShare } from 'react-icons/fa'; // Share
 import { HiArrowPathRoundedSquare } from 'react-icons/hi2'; // Rewrite
 import { AiFillDislike } from 'react-icons/ai'; // Dislike
 import { LuClipboardCopy } from 'react-icons/lu'; // Copy
-import { FaRegEdit } from 'react-icons/fa'; // Edit Question
 import { MdDelete } from 'react-icons/md'; // Delete
 import supabase from '@/lib/supabase';
 import Markdown from 'react-markdown';
 import { NextUIProvider, Skeleton } from '@nextui-org/react';
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
-
-const randomAnswers: string[] = [
-    `- **Sushi:** *Delight in the exquisite flavors of Japan's iconic dish, sushi, with its perfect harmony of fresh fish, vinegared rice, and seaweed, showcasing the artistry of Japanese culinary tradition.*\n- **Manga:** *Immerse yourself in the captivating world of manga, where vivid illustrations and compelling storytelling converge, offering a unique and imaginative form of Japanese pop culture.*\n- **Cherry Blossoms:** *Witness the breathtaking beauty of cherry blossoms in spring, as these ephemeral flowers blanket the landscape in hues of pink, creating a magical and fleeting spectacle.*\n- **Samurai:** *Explore the rich history of Japan's legendary samurai warriors, known for their martial skills, honor code, and distinctive armor, leaving an indelible mark on the country's cultural heritage.*\n- **Zen Gardens:** *Find tranquility in the meticulous design of Zen gardens, where carefully arranged rocks, raked gravel, and lush greenery create a serene atmosphere, inviting contemplation and mindfulness.*`,
-    `- **Tokyo:** *Experience the vibrant blend of modernity and tradition in Japan's bustling capital, featuring skyscrapers, historic temples, and the iconic Shibuya Crossing.*\n- **Kyoto:** *Immerse yourself in the cultural heart of Japan with Kyoto's traditional tea houses, ancient shrines, and stunning gardens, preserving the country's rich heritage.*\n- **Osaka:** *Indulge in culinary delights and entertainment in Osaka, known for its street food, vibrant nightlife, and the historic Osaka Castle.*\n- **Hakone:** *Escape to the serene landscapes of Hakone, offering hot springs, picturesque views of Mount Fuji, and traditional ryokan stays.*\n- **Hiroshima:** *Reflect on history at Hiroshima, home to the Peace Memorial Park and Museum, and explore the rejuvenated city symbolizing resilience and peace.*`,
-    `- **寿司:** *楽しい日本の象徴、寿司の絶妙な味わいを堪能してください。新鮮な魚、酢飯、海藻の完璧なハーモニーが、日本料理の芸術を象徴しています。*\n- **マンガ:** *魅力的なマンガの世界に没頭し、鮮やかなイラストと引き込まれるストーリーテリングが交わり、ユニークで想像力豊かな日本のポップカルチャーを提供します。*\n- **桜:** *春の美しい桜の花々を目撃しましょう。これらの儚い花がピンクの色で風景を覆い、魔法のようで一瞬のスペクタクルを作り出します。*\n- **侍:** *伝説的な侍の武士の歴史を探索し、その武道、誠実なコード、特徴的な鎧で知られています。これらの戦士は、国の文化遺産に不可欠な印を残しました。*\n- **禅庭園:** *禅の庭園の緻密なデザインで静けさを見つけてください。注意深く配置された岩、櫛で整えられた砂利、豊かな緑が、静寂な雰囲気を作り出し、瞑想とマインドフルネスを招きます。*`,
-];
-
-type ChatHistory = {
-    userQuery: string;
-    botResponse: string;
-};
-
-type Post = {
-    id: string;
-    title: string;
-    destination: string;
-    image: string;
-    description: string;
-};
-
-type SearchResult = {
-    id: string[];
-    destination: string;
-    title: string;
-    description: string;
-    image: string[];
-};
-
-const p_data: SearchResult[] = [
-    {
-        id: ['G5651XC8'],
-        title: "Exploring Japan's Northern Frontier",
-        destination: 'Hokkaido',
-        image: ['https://en.japantravel.com/photo/1655-215379/1440x960!/hokkaido-lake-toya-215379.jpg'],
-        description: 'Hokkaido as Japan’s second largest island to the far north, has much wilderness to be explored.\nRenowned among tourists and locals alike for its abundance of powder snow and white landscapes, Hokkaido is always a popular choice for winter sports and scenery in places like Niseko and wetland Kushiro Shitsugen. Its attraction extends beyond nature to ramen and seafood such as crabs and sea urchins, which are of the highest quality in the frigid waters here.\nApart from its famed cuisine, parks and beautiful nature, Hokkaido is also steeped in history as the home of the indigenous Ainu people. Increasingly popular in seasons other than winter, more visitors have been flocking here for the delightful moss phlox and tulip fields in spring and a land that teems with life during summer.',
-    },
-    {
-        id: ['R3U0Y210'],
-        title: "Hokkaido's second biggest city",
-        destination: 'Asahikawa',
-        image: ['https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg'],
-        description: 'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
-    },
-    {
-        id: ['R3U0Y210'],
-        title: "Hokkaido's second biggest city",
-        destination: 'Asahikawa',
-        image: ['https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg'],
-        description: 'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
-    },
-    {
-        id: ['R3U0Y210'],
-        title: "Hokkaido's second biggest city",
-        destination: 'Asahikawa',
-        image: ['https://en.japantravel.com/photo/39234-215106/120x80!/hokkaido-asahikawa-215106.jpg'],
-        description: 'Asahikawa Airport in Hokkaido cuts a sharp form as planes come and go from its single runway. With easy access from Asahikawa Station, Asahiyama Zoo, and Furano Station, visitors to the area may find themselves on the tarmac of this airport that has been around for more than half a century.\nWhile in the Asahikawa and Furano area, rediscover the world’s natural splendor at Asahiyama Zoo, Biei Farm, Furano Cheese Factory, and Ueno Farm, also known as the Gnomes’ Garden—even try sake at Otokoyama Sake Brewing Museum.\nThe Asahiyama Zoo is the northernmost zoo of its kind in Japan. Visitors to the Asahiyama Zoo will see animals in wide-open spaces where they frolic, fly, and swim. With seals swimming through tubes, birds flying overhead in the aviarium, and penguins on parade at feeding time, you’ll be transported to a magical animal kingdom.\nSee fields of fluffy lavender at Biei Farm and try a variety of lavender-themed treats. At the Furano Cheese Factory discover the cheese-making process and eat your fill of the creamy delicious food we all know and love.\nLikewise, at Ueno Farm, guests can rediscover a world they thought they knew. This garden getaway is the perfect place for green-thumb enthusiasts and lovers of a quaint and picturesque scene. An ideal family trip, the Gnomes’ Garden provides a mixture of English gardens and Japanese flora.\nIf you’re planning a trip without children, make sure to visit the local sake brewery that offers free tasting and a spectrum of local produce. Discover the brewing methods used in Japan for nihonshu, or sake as it’s commonly called. And even sample natural spring water from Daisetsuzan Mountain outside the brewery.\nHokkaido Access Guide\nMajor Airports in Hokkaido',
-    },
-];
-
-function formatLink(link: string) {
-    return link.replace(/(\d+)x(\d+)!/, "0x0!").replace("/1000/", "/0x0!/");
-}
+import { SearchResult } from '@/types/search-result';
+import { Post } from '@/types/post';
+import { ChatHistory } from '@/types/chatbot';
+import { formatLink } from '@/utils/utils';
+import { mockChatBotAnswers, mockSearchResults } from '@/public/data/mockData'; // Mock Data for skeleton loading
 
 let previousChatHistory: ChatHistory[] = [];
 
@@ -100,7 +41,7 @@ export default function Page({ params }: { params: { id: string } }) {
         const getPost = async () => {
             try {
                 setIsLoaded(false);
-                setRecommendedDestinations(p_data);
+                setRecommendedDestinations(mockSearchResults);
 
                 const destinationRoot = await supabase
                     .from('destinations')
@@ -191,7 +132,7 @@ export default function Page({ params }: { params: { id: string } }) {
     const getAnswer = async (question: string) => {
         try {
             setIsAsked(false);
-            const skeletonResult = randomAnswers[Math.floor(Math.random() * randomAnswers.length)];
+            const skeletonResult = mockChatBotAnswers[Math.floor(Math.random() * mockChatBotAnswers.length)];
 
             // Store user and bot messages in chat history
             previousChatHistory = [...chatHistory];

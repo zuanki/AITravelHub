@@ -67,10 +67,9 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 
-# Get and return the sum of two numbers
 @app.route('/chat/completions', methods=['POST'])
 @cross_origin()
-def add():
+def chat_completion():
     data = request.get_json()
     input = data['message']
     bot_response = generate_ans(input)
