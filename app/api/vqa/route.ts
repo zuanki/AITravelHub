@@ -42,7 +42,7 @@ const urlToGenerativePart = async (url: any) => {
     } catch (error) {
         console.error(
             "processImages | Error fetching image from URL:",
-            error
+            // error
         );
         return { Error: "Error fetching image from URL" };
     }
@@ -71,9 +71,9 @@ export async function POST(req: NextRequest) {
             text
         });
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         return NextResponse.json({
-            text: "Unable to process the prompt"
+            text: "Unable to process the prompt. Please select an image and try again."
         });
     }
 }
