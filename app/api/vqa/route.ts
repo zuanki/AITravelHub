@@ -6,6 +6,9 @@ import fs from "fs";
 import axios from 'axios';
 import mime from 'mime-types';
 
+// IMPORTANT! Set the runtime to edge
+export const runtime = 'edge';
+
 function fileToGenerativePart(path: any, mimeType: any) {
     return {
         inlineData: {
