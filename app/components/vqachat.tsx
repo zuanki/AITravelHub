@@ -37,6 +37,8 @@ const getCurrentDatetime = (): string => {
 export default function Chat() {
     let resMsg = '';
 
+    let url = '';
+
     const [chatHistory, setChatHistory] = useState<ChatProps[]>(data);
 
     const [input, setInput] = useState<string>('');
@@ -50,6 +52,8 @@ export default function Chat() {
     const chatContainerRef = useRef<HTMLDivElement>(null);
 
     const [blobUrl, setBlobUrl] = useState<string>('');
+
+    const [urlImage, setUrlImage] = useState<string>('');
 
     const [isLoaded, setIsLoaded] = useState<boolean>(true);
 
@@ -184,9 +188,15 @@ export default function Chat() {
                         }
                     );
                 });
+                url = await promiseUpload;
+            }
+            else {
+                if (urlImage !== '') {
+                    url = urlImage;
+                }
             }
 
-            const url = await promiseUpload;
+            setUrlImage(url);
             handleSendMessage(url);
             clearInputs();
 
@@ -194,13 +204,10 @@ export default function Chat() {
             let dataForm = {
                 prompt: input,
                 url: url
-                // url: "https://media.cntraveler.com/photos/63482b255e7943ad4006df0b/16:9/w_2560%2Cc_limit/tokyoGettyImages-1031467664.jpeg"
             };
 
             axios.post('/api/vqa', dataForm).then((res) => {
                 console.log(res.data);
-                // setResult(res.data.text);
-                // console.log(result);
                 resMsg = res.data.text
                 sendBotMessage(resMsg);
                 setIsLoaded(true);

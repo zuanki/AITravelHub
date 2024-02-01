@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     } catch (error) {
         // console.error(error);
         return NextResponse.json({
-            text: "Unable to process the prompt. Please select an image and try again."
+            text: "Unable to process the prompt. Please select an image or try another prompt."
         });
     }
 }
